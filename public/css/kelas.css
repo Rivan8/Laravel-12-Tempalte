@@ -2,7 +2,7 @@
 
 .class-list-container {
     font-family: 'Open Sans', sans-serif;
-    padding: 2rem;
+    width: 100%;
 }
 
 .class-header {
@@ -10,6 +10,20 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    gap: 1rem;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .class-header {
+        flex-direction: column;
+    }
+    .class-search {
+        width: 100%;
+    }
+    .class-search input {
+        flex: 1;
+    }
 }
 
 .class-header h2 {
@@ -20,6 +34,7 @@
 .class-search {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .class-search input {
@@ -27,6 +42,7 @@
     border-radius: 0.5rem;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
+    min-width: 250px;
 }
 
 .class-search button {
@@ -34,9 +50,86 @@
     color: #fff;
     border: none;
     border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     cursor: pointer;
     font-weight: bold;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.class-search button:hover {
+    opacity: 0.9;
+}
+
+.class-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+    transition: all 0.3s ease;
+    border-radius: 0.5rem !important;
+    border: 1px solid #d2d6da;
+    background-color: #fff;
+    color: #67748e;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.filter-btn:hover {
+    background-color: #f8f9fa;
+    color: #344767;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.filter-btn.active {
+    background-image: linear-gradient(310deg, #7928CA 0%, #FF0080 100%);
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 7px -1px rgba(0, 0, 0, 0.11), 0 2px 4px -1px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
+}
+
+/* Filter animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Empty state */
+.filter-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+    background: #fff;
+    border-radius: 0.75rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 576px) {
+    .filter-btn {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.75rem;
+    }
 }
 
 .class-grid {
@@ -51,6 +144,9 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .class-card:hover {
@@ -59,7 +155,8 @@
 }
 
 .class-image {
-    height: 150px;
+    height: 180px;
+    flex-shrink: 0;
 }
 
 .class-image img {
@@ -70,23 +167,50 @@
 
 .class-info {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .class-info h3 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: #344767;
     margin-bottom: 0.5rem;
+    line-height: 1.4;
+    min-height: 3.2em; /* Ensure consistent title height */
 }
+
+.class-category {
+    align-self: flex-start;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    border-radius: 0.375rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.bg-category-disciple { background-image: linear-gradient(310deg, #7928CA 0%, #FF0080 100%); }
+.bg-category-new { background-image: linear-gradient(310deg, #21d4fd 0%, #2152ff 100%); }
+.bg-category-plant { background-image: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%); }
+.bg-category-grow { background-image: linear-gradient(310deg, #f53939 0%, #fbcf33 100%); }
+.bg-category-serve { background-image: linear-gradient(310deg, #344767 0%, #1a2331 100%); }
+.bg-category-lead { background-image: linear-gradient(310deg, #627594 0%, #A8B8D8 100%); }
 
 .class-info p {
     font-size: 0.875rem;
     color: #67748e;
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Push progress and button to bottom */
 }
 
 .class-progress {
-    margin-top: 1rem;
+    margin-top: auto;
+    margin-bottom: 1rem;
 }
 
 .class-progress span {

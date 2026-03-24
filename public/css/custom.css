@@ -2,3 +2,28 @@
 .bg-gradient-primary {
   background-image: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
 }
+
+@media (min-width: 1200px) {
+  .g-sidenav-show:not(.rtl) .main-content {
+    margin-left: 17.125rem !important;
+  }
+  .g-sidenav-show:not(.rtl) .sidenav {
+    width: 15.625rem !important;
+  }
+}
+
+.main-content {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  min-height: 100vh;
+}
+
+.class-list-container {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.card-title {
+    min-height: 3rem;
+}
