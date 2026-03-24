@@ -12,6 +12,41 @@
   }
 }
 
+/* Mobile sidebar behavior */
+@media (max-width: 1199.98px) {
+  .g-sidenav-show .sidenav {
+    transform: translateX(-17.125rem);
+    transition: transform 0.3s ease;
+  }
+  .g-sidenav-show.g-sidenav-pinned .sidenav {
+    transform: translateX(0) !important;
+    z-index: 1050;
+  }
+  .g-sidenav-show .main-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* Sidenav toggler hamburger lines */
+.sidenav-toggler-inner {
+  width: 18px;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.sidenav-toggler-inner .sidenav-toggler-line {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: #344767;
+  border-radius: 1px;
+  transition: all 0.15s ease;
+}
+
+.sidenav-toggler-inner .sidenav-toggler-line:not(:last-child) {
+  margin-bottom: 3px;
+}
+
 .main-content {
   position: relative;
   transition: all 0.2s ease-in-out;
