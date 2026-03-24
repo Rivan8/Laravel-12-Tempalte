@@ -3,6 +3,7 @@
 <head>
     @include('component.head')
     <title>@yield('title')</title>
+    @stack('styles')
 </head>
 <body class="g-sidenav-show bg-gray-100">
     @include('component.sidebar')
