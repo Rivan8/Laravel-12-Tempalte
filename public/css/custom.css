@@ -1,0 +1,4 @@
+/* public/css/custom.css */
+.bg-gradient-primary {
+  background-image: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+}
