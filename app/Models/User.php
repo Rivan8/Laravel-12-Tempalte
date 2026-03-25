@@ -19,10 +19,20 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nama_lengkap',
+        'jenis_kelamin',
         'email',
+        'no_hp',
+        'role',
         'password',
     ];
+
+    public function kelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'kelas_users')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
 
     /**
      * The attributes that should be hidden for serialization.
