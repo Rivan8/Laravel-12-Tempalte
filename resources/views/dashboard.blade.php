@@ -1,17 +1,183 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="container-fluid py-4">
+    <!-- Hero / Welcome -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card bg-gradient-primary shadow-lg">
+                <div class="card-body p-5 position-relative overflow-hidden">
+                    <img src="{{ asset('img/shapes/waves-white.svg') }}" alt="pattern-lines" class="position-absolute top-0 start-0 w-100 opacity-6">
+                    <div class="row position-relative z-index-1">
+                        <div class="col-md-8 d-flex flex-column justify-content-center text-white">
+                            <h2 class="text-white mb-2 font-weight-bolder">Halo, {{ $user->nama_lengkap }}! 👋</h2>
+                            <p class="mb-4 text-white opacity-8">
+                                Siap untuk melanjutkan perjalanan pertumbuhan rohani Anda hari ini? Mari kita pelajari firman Tuhan secara terstruktur.
+                            </p>
+                            <div>
+                                <a href="{{ route('kelas.index') }}" class="btn bg-white text-primary mb-0 shadow-sm font-weight-bolder">
+                                    <i class="fas fa-book-reader me-2"></i> Jelajahi Katalog Kelas
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-none d-md-flex align-items-center justify-content-center">
+                            @if(file_exists(public_path('img/illustrations/rocket-white.png')))
+                                <img src="{{ asset('img/illustrations/rocket-white.png') }}" alt="illustration" class="img-fluid w-75">
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Kelas</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ $myClasses->count() }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="fas fa-books text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Kelas Selesai</p>
+                                <h5 class="font-weight-bolder text-success mb-0">
+                                    {{ $myClasses->where('pivot.status', 'completed')->count() }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md">
+                                <i class="fas fa-check text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Kelas Aktif / Pending</p>
+                                <h5 class="font-weight-bolder text-warning mb-0">
+                                    {{ $myClasses->whereIn('pivot.status', ['in_progress', 'requested'])->count() }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md">
+                                <i class="fas fa-clock text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Classes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 p-3">
+                    <h6 class="mb-1">Kelas Saya</h6>
+                    <p class="text-sm">Lanjutkan sesi pembelajaran Anda.</p>
+                </div>
+                <div class="card-body p-3">
+                    @if($myClasses->isEmpty())
+                        <div class="row">
+                            <div class="col-md-12 text-center py-5">
+                                <div class="icon icon-shape bg-gradient-secondary shadow text-center border-radius-md mb-3 mx-auto" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-folder-open text-white text-lg opacity-10 mt-3" aria-hidden="true"></i>
+                                </div>
+                                <h5 class="mt-3">Anda belum mengambil kelas apapun.</h5>
+                                <p class="text-sm text-secondary">Katalog kelas kami berisi banyak materi luar biasa untuk pertumbuhan rohani Anda. Yuk mulai sekarang!</p>
+                                <a href="{{ route('kelas.index') }}" class="btn bg-gradient-primary mt-3">
+                                    Jelajahi Kelas Berjenjang
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="row">
+                            @foreach($myClasses as $kelas)
+                                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                                    <div class="card card-blog card-plain">
+                                        <div class="position-relative" style="height: 180px; overflow: hidden;">
+                                            <a class="d-block shadow-xl border-radius-xl h-100">
+                                                @if($kelas->gambar)
+                                                    <img src="{{ asset($kelas->gambar) }}" alt="{{ $kelas->nama_kelas }}" class="img-fluid shadow border-radius-xl" style="width: 100%; height: 100%; object-fit: cover;">
+                                                @else
+                                                    <!-- Fallback image/gradient -->
+                                                    <div class="w-100 h-100 bg-gradient-info border-radius-xl"></div>
+                                                @endif
+                                            </a>
+                                        </div>
+                                        <div class="card-body px-1 pb-0 mt-3">
+                                            <p class="text-gradient text-primary mb-2 text-xs font-weight-bold opacity-8 text-uppercase tracking-wider">{{ $kelas->kategori }}</p>
+                                            <a href="javascript:;">
+                                                <h5>
+                                                    {{ $kelas->nama_kelas }}
+                                                </h5>
+                                            </a>
+                                            <p class="mb-4 text-sm text-secondary" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                                {{ $kelas->deskripsi }}
+                                            </p>
+                                            <!-- Bar Progress Terintegrasi Database -->
+                                            @php 
+                                                $progressDashboard = $user->classProgress($kelas->id);
+                                                $barColor = $progressDashboard == 100 ? 'bg-gradient-success' : 'bg-gradient-primary';
+                                            @endphp
+                                            <div class="d-flex align-items-center justify-content-between mb-1 mt-3">
+                                                <span class="text-xs font-weight-bold text-secondary text-uppercase tracking-wider">Kemajuan</span>
+                                                <span class="text-xs font-weight-bold {{ $progressDashboard == 100 ? 'text-success' : 'text-primary' }}">{{ $progressDashboard }}%</span>
+                                            </div>
+                                            <div class="progress w-100 mb-4 bg-light" style="height: 6px;">
+                                                <div class="progress-bar {{ $barColor }} border-radius-sm" role="progressbar" aria-valuenow="{{ $progressDashboard }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $progressDashboard }}%;"></div>
+                                            </div>
+
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                @if($kelas->pivot->status === 'completed')
+                                                    <button type="button" class="btn btn-outline-success btn-sm mb-0 w-100 disabled">Selesai</button>
+                                                @elseif($kelas->pivot->status === 'in_progress')
+                                                    <a href="{{ route('kelas.belajar', $kelas->id) }}" class="btn bg-gradient-primary btn-sm mb-0 w-100">Lanjutkan</a>
+                                                @else
+                                                    <button type="button" class="btn btn-outline-warning btn-sm mb-0 w-100 disabled">Menunggu Admin</button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

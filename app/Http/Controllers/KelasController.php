@@ -8,7 +8,11 @@ class KelasController extends Controller
 {
     public function index()
     {
-        return view('kelas.index');
+        $kelases = \App\Models\Kelas::orderBy('created_at', 'desc')->get();
+        // Extrak kategori unik untuk tombol Filter Dinamis
+        $categories = $kelases->pluck('kategori')->filter()->unique()->values();
+        
+        return view('kelas.index', compact('kelases', 'categories'));
     }
 
     public function requestKelas(Request $request, $id)
@@ -21,72 +25,84 @@ class KelasController extends Controller
             return back()->with('error', 'Anda sudah mengakses atau mendaftar kelas ini.');
         }
 
-        $namaKelas = $kelas->nama_kelas;
+        // Verifikasi Prasyarat Dinamis via Database
+        if ($kelas->prasyarat_kelas_id) {
+            $prasyarat = \App\Models\Kelas::find($kelas->prasyarat_kelas_id);
+            $hasCompletedPrasyarat = $user->kelas()
+                ->where('kelas_id', $kelas->prasyarat_kelas_id)
+                ->where('kelas_users.status', 'completed')
+                ->exists();
 
-        // Helper untuk cek apakah user sudah menyelesaikan kelas tertentu berdasarkan nama kelas
-        $hasCompleted = function($kelasName) use ($user) {
-            return $user->kelas()
-                        ->where('nama_kelas', 'like', '%' . $kelasName . '%')
-                        ->where('kelas_users.status', 'completed')
-                        ->exists();
-        };
+            if (!$hasCompletedPrasyarat) {
+                $namaPrasyarat = $prasyarat ? $prasyarat->nama_kelas : 'Prasyarat sebelumnya';
+                return back()->with('error', 'Anda harus menyelesaikan kelas ' . $namaPrasyarat . ' terlebih dahulu untuk dapat mendaftar kelas ini.');
+            }
+        }
 
-        $canRequest = false;
-        $errorMessage = 'Anda tidak memenuhi syarat untuk mendaftar kelas ini.';
+        // Jika lolos semua validasi
+        $user->kelas()->attach($id, ['status' => 'requested']);
+        
+        return back()->with('success', 'Berhasil melakukan request untuk kelas ' . $kelas->nama_kelas);
+    }
 
-        if (str_contains($namaKelas, 'DMT')) {
-            if ($hasCompleted('CTT')) {
-                $canRequest = true;
+    public function show($id)
+    {
+        $kelas = \App\Models\Kelas::findOrFail($id);
+        $user = auth()->user();
+        
+        $enrollment = $user ? $user->kelas()->wherePivot('kelas_id', $id)->first() : null;
+        $status = $enrollment ? $enrollment->pivot->status : null;
+        
+        return view('kelas.show', compact('kelas', 'status'));
+    }
+
+    public function belajar($id, $materi_id = null)
+    {
+        $kelas = \App\Models\Kelas::with(['materi' => function($q) {
+            $q->orderBy('urutan', 'asc');
+        }])->findOrFail($id);
+        
+        $user = auth()->user();
+        
+        $enrollment = $user->kelas()->wherePivot('kelas_id', $id)->first();
+        
+        if (!$enrollment || ($enrollment->pivot->status !== 'in_progress' && $enrollment->pivot->status !== 'completed')) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum memiliki akses untuk mempelajari kelas ini.');
+        }
+
+        $materiList = $kelas->materi;
+        $completedMateriIds = $user->materi()->wherePivot('is_completed', true)->pluck('materi_id')->toArray();
+        $isAllCompleted = true;
+        
+        // Kalkulasi Status Terkunci (Locked) & Status Selesai
+        foreach ($materiList as $index => $m) {
+            $m->is_completed = in_array($m->id, $completedMateriIds);
+            
+            // Sesi 1 selalu terbuka. Sesi selanjutnya ditinjau dari kelulusan sesi sebelumnya.
+            if ($index == 0) {
+                $m->is_locked = false;
             } else {
-                $errorMessage = 'User harus menyelesaikan kelas CTT baru bisa request kelas DMT.';
+                $m->is_locked = !$materiList[$index - 1]->is_completed;
             }
-        } elseif (str_contains($namaKelas, 'Foundation Class 2')) {
-            if ($hasCompleted('Foundation Class 1')) {
-                $canRequest = true;
-            } else {
-                $errorMessage = 'User harus menyelesaikan kelas Foundation Class 1 baru bisa request Foundation Class 2.';
+            
+            if (!$m->is_completed) {
+                $isAllCompleted = false;
             }
-        } elseif (str_contains($namaKelas, 'Foundation Class 3')) {
-            if ($hasCompleted('Foundation Class 1')) {
-                $canRequest = true;
-            } else {
-                $errorMessage = 'User harus menyelesaikan Foundation Class 1 baru bisa request Foundation Class 3.';
-            }
-        } elseif (str_contains($namaKelas, 'Grade 1')) {
-            if ($hasCompleted('Foundation Class 2')) {
-                $canRequest = true;
-            } else {
-                $errorMessage = 'User harus menyelesaikan Foundation Class 2 baru bisa request Grade 1.';
-            }
-        } elseif (str_contains($namaKelas, 'Married Class')) {
-            if ($hasCompleted('Foundation Class 2')) {
-                $canRequest = true;
-            } else {
-                $errorMessage = 'User harus menyelesaikan Foundation Class 2 baru bisa request Married Class.';
-            }
-        } elseif (str_contains($namaKelas, 'Grade 2')) {
-            if ($hasCompleted('Grade 1')) {
-                $canRequest = true;
-            } else {
-                $errorMessage = 'User harus menyelesaikan Grade 1 baru bisa request Grade 2.';
-            }
-        } elseif (str_contains($namaKelas, 'Grade 3')) {
-            if ($hasCompleted('Grade 2')) {
-                $canRequest = true;
-            } else {
-                $errorMessage = 'User harus menyelesaikan Grade 2 baru bisa request Grade 3.';
+        }
+
+        if ($materi_id) {
+            $activeMateri = $materiList->where('id', $materi_id)->first();
+            if (!$activeMateri) abort(404, 'Materi tidak ditemukan');
+            
+            if ($activeMateri->is_locked) {
+                return redirect()->route('kelas.belajar', $id)->with('error', 'Sesi ini masih tergembok! Harap tonton sesi sebelumnya setidaknya 80% durasi.');
             }
         } else {
-            // Volunteer Class, Foundation Class 1, Membership Class, CTT selalu terbuka
-            // Aturan default: jika tidak termasuk dalam daftar limit, akses diizinkan
-            $canRequest = true;
+            // Cari Sesi terjauh yang sudah terbuka namun BELUM selesai ditonton. Jika tidak ada, fallback ke Sesi 1.
+            $activeMateri = $materiList->where('is_locked', false)->where('is_completed', false)->first() ?? $materiList->first();
         }
 
-        if ($canRequest) {
-            $user->kelas()->attach($id, ['status' => 'requested']);
-            return back()->with('success', 'Berhasil request kelas ' . $namaKelas);
-        }
-
-        return back()->with('error', $errorMessage);
+        // Jika materi kosong, biarkan lolos untuk Empty State (diatur di Blade)
+        return view('kelas.belajar', compact('kelas', 'enrollment', 'activeMateri', 'materiList', 'isAllCompleted'));
     }
 }

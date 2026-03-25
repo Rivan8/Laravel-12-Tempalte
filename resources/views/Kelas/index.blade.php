@@ -20,241 +20,59 @@
             </div>
         </div>
 
-        {{-- Filter Buttons --}}
+        {{-- Filter Buttons Dinamis dari Database CMS --}}
         <div class="class-filters" id="categoryFilters">
-            <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">
-                <i class="fas fa-th-large me-1"></i> Semua
+            <button class="filter-btn active shadow-sm" data-filter="all" onclick="setFilter(this)">
+                <i class="fas fa-th-large me-1"></i> Semua Kelas
             </button>
-            <button class="filter-btn" data-filter="disciple" onclick="setFilter(this)">
-                <i class="fas fa-users me-1"></i> Disciple Community
-            </button>
-            <button class="filter-btn" data-filter="new" onclick="setFilter(this)">
-                <i class="fas fa-seedling me-1"></i> Equip - New
-            </button>
-            <button class="filter-btn" data-filter="plant" onclick="setFilter(this)">
-                <i class="fas fa-leaf me-1"></i> Equip - Plant
-            </button>
-            <button class="filter-btn" data-filter="grow" onclick="setFilter(this)">
-                <i class="fas fa-chart-line me-1"></i> Equip - Grow
-            </button>
-            <button class="filter-btn" data-filter="serve" onclick="setFilter(this)">
-                <i class="fas fa-hands-helping me-1"></i> Equip - Serve
-            </button>
-            <button class="filter-btn" data-filter="lead" onclick="setFilter(this)">
-                <i class="fas fa-crown me-1"></i> Equip - Lead
-            </button>
+            @if(isset($categories) && count($categories) > 0)
+                @foreach($categories as $cat)
+                <button class="filter-btn shadow-sm" data-filter="{{ Str::slug($cat) }}" onclick="setFilter(this)">
+                    <i class="fas fa-layer-group me-1"></i> {{ $cat }}
+                </button>
+                @endforeach
+            @endif
         </div>
 
         <div class="class-grid" id="classGrid">
-            <!-- 1. CTT -->
-            <div class="class-card" data-category="disciple">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved0.jpg') }}" alt="CTT">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-disciple">Disciple Community</span>
-                    <h3>CTT (Core Team Training)</h3>
-                    <p>Membangun tim inti yang kuat dan berdedikasi.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
+            @if(isset($kelases) && $kelases->count() > 0)
+                @foreach($kelases as $kelas)
+                <div class="class-card shadow-sm" data-category="{{ Str::slug($kelas->kategori) }}">
+                    <div class="class-image" style="height: 180px; position: relative;">
+                        @if($kelas->gambar)
+                            <img src="{{ asset($kelas->gambar) }}" alt="{{ $kelas->nama_kelas }}" class="w-100 h-100 object-fit-cover" style="object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        @else
+                            <div class="w-100 h-100 bg-gradient-info d-flex align-items-center justify-content-center" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                                <i class="fas fa-church text-white fa-4x opacity-5"></i>
+                            </div>
+                        @endif
                     </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 2. DMT -->
-            <div class="class-card" data-category="disciple">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved1.jpg') }}" alt="DMT">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-disciple">Disciple Community</span>
-                    <h3>DMT (Disciple Maker Training)</h3>
-                    <p>Pelatihan untuk menjadi pembuat murid yang efektif.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
+                    <div class="class-info">
+                        <span class="badge bg-gradient-dark mb-2 px-3 py-1 font-weight-normal text-xs" style="border-radius: 4px;">{{ $kelas->kategori }}</span>
+                        <h4 class="mt-1 font-weight-bolder text-dark mb-2" style="font-size: 1.15rem;">{{ $kelas->nama_kelas }}</h4>
+                        <!-- Deskripsi batas maksimal 2 baris agar rapi -->
+                        <p class="text-secondary text-sm mb-3" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px;">
+                            {{ $kelas->deskripsi }}
+                        </p>
+                        
+                        @auth
+                            @php 
+                                $progress = auth()->user()->classProgress($kelas->id);
+                                $progressColor = $progress == 100 ? 'bg-gradient-success' : 'bg-gradient-primary';
+                            @endphp
+                            <div class="class-progress mb-4">
+                                <div class="progress-bar mb-2 bg-light border-radius-sm" style="height: 6px;">
+                                    <div class="progress-fill {{ $progressColor }} border-radius-sm" style="width: {{ $progress }}%; height: 100%;"></div>
+                                </div>
+                                <span class="text-xs font-weight-bold {{ $progress == 100 ? 'text-success' : 'text-primary' }}">{{ $progress }}% Target Selesai</span>
+                            </div>
+                        @endauth
+                        
+                        <a href="{{ route('kelas.show', $kelas->id) }}" class="btn bg-gradient-primary w-100 font-weight-bold text-white shadow-sm" style="display: block; text-align: center; text-decoration: none;">Cek Informasi Modul</a>
                     </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
                 </div>
-            </div>
-
-            <!-- 3. Foundation Class 1 -->
-            <div class="class-card" data-category="new">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved6.jpg') }}" alt="Foundation 1">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-new">Equip - New</span>
-                    <h3>Foundation Class 1</h3>
-                    <p>Dasar Keselamatan dan Baptisan (Salvation & Baptism).</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 4. Membership Class -->
-            <div class="class-card" data-category="new">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved8.jpg') }}" alt="Membership">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-new">Equip - New</span>
-                    <h3>Membership Class</h3>
-                    <p>Memahami visi, misi, dan komitmen sebagai anggota.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 5. Foundation Class 2 -->
-            <div class="class-card" data-category="plant">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved14.jpg') }}" alt="Foundation 2">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-plant">Equip - Plant</span>
-                    <h3>Foundation Class 2</h3>
-                    <p>Membangun kebiasaan Doa, Alkitab, dan Komunitas.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 6. Foundation Class 3 -->
-            <div class="class-card" data-category="plant">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/white-curved.jpeg') }}" alt="Foundation 3">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-plant">Equip - Plant</span>
-                    <h3>Foundation Class 3</h3>
-                    <p>Renewal Life: Pemulihan dan pembaharuan hidup.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 7. Grade 1 -->
-            <div class="class-card" data-category="grow">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved0.jpg') }}" alt="Grade 1">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-grow">Equip - Grow</span>
-                    <h3>Grade 1 (The Cross)</h3>
-                    <p>Mendalami makna dan kuasa Salib Kristus.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 8. Grade 2 -->
-            <div class="class-card" data-category="grow">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved1.jpg') }}" alt="Grade 2">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-grow">Equip - Grow</span>
-                    <h3>Grade 2 (The Power)</h3>
-                    <p>Mengalami kuasa Roh Kudus dalam kehidupan sehari-hari.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 9. Grade 3 -->
-            <div class="class-card" data-category="grow">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved6.jpg') }}" alt="Grade 3">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-grow">Equip - Grow</span>
-                    <h3>Grade 3 (The Eternity)</h3>
-                    <p>Hidup dengan perspektif kekekalan.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 10. Volunteer Class -->
-            <div class="class-card" data-category="serve">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved8.jpg') }}" alt="Volunteer">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-serve">Equip - Serve</span>
-                    <h3>Volunteer Class</h3>
-                    <p>Persiapan untuk melayani di berbagai departemen.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
-            <!-- 11. Leadership Class -->
-            <div class="class-card" data-category="lead">
-                <div class="class-image">
-                    <img src="{{ asset('img/curved-images/curved14.jpg') }}" alt="Leadership">
-                </div>
-                <div class="class-info">
-                    <span class="class-category bg-category-lead">Equip - Lead</span>
-                    <h3>Leadership Class</h3>
-                    <p>Membangun jiwa kepemimpinan yang berintegritas.</p>
-                    <div class="class-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span>0% Selesai</span>
-                    </div>
-                    <button class="btn-enter-class">Masuk Kelas</button>
-                </div>
-            </div>
-
+                @endforeach
+            @endif
         </div>
 
         {{-- Empty state ketika tidak ada hasil --}}
