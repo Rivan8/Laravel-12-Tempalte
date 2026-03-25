@@ -48,7 +48,25 @@
                         @endif
                     </div>
                     <div class="class-info">
-                        <span class="badge bg-gradient-dark mb-2 px-3 py-1 font-weight-normal text-xs" style="border-radius: 4px;">{{ $kelas->kategori }}</span>
+                        @php
+                            $catStr = strtolower($kelas->kategori);
+                            $badgeColor = 'bg-gradient-dark'; // default
+                            
+                            if(str_contains($catStr, 'new') || str_contains($catStr, 'foundation')) { $badgeColor = 'bg-gradient-success'; }
+                            elseif(str_contains($catStr, 'grow') || str_contains($catStr, 'spiritual') || str_contains($catStr, 'grade')) { $badgeColor = 'bg-gradient-warning'; }
+                            elseif(str_contains($catStr, 'plant')) { $badgeColor = 'bg-gradient-info'; }
+                            elseif(str_contains($catStr, 'lead') || str_contains($catStr, 'disciple')) { $badgeColor = 'bg-gradient-danger'; }
+                            elseif(str_contains($catStr, 'serve') || str_contains($catStr, 'volunteer')) { $badgeColor = 'bg-gradient-primary'; }
+                            elseif(str_contains($catStr, 'marri')) { $badgeColor = 'bg-gradient-secondary'; }
+                            else {
+                                // Fallback dinamis berdasarkan panjang / karakter string
+                                $gradients = ['bg-gradient-primary', 'bg-gradient-secondary', 'bg-gradient-info', 'bg-gradient-success', 'bg-gradient-warning', 'bg-gradient-danger', 'bg-gradient-dark'];
+                                $badgeColor = $gradients[strlen($catStr) % count($gradients)];
+                            }
+                        @endphp
+                        <span class="badge {{ $badgeColor }} shadow-sm mb-2 px-3 py-1 font-weight-bold text-xs" style="border-radius: 6px; letter-spacing: 0.5px;">
+                            <i class="fas fa-tag me-1 opacity-8"></i> {{ mb_strtoupper($kelas->kategori) }}
+                        </span>
                         <h4 class="mt-1 font-weight-bolder text-dark mb-2" style="font-size: 1.15rem;">{{ $kelas->nama_kelas }}</h4>
                         <!-- Deskripsi batas maksimal 2 baris agar rapi -->
                         <p class="text-secondary text-sm mb-3" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px;">
@@ -108,8 +126,12 @@
 
         cards.forEach(card => {
             const category = card.getAttribute('data-category');
-            const title = card.querySelector('h3').textContent.toLowerCase();
-            const description = card.querySelector('.class-info p').textContent.toLowerCase();
+            // Penyesuaian Query Selector karena tag judul sekarang adalah h4
+            const titleElement = card.querySelector('h4');
+            const title = titleElement ? titleElement.textContent.toLowerCase() : '';
+            
+            const descElement = card.querySelector('.class-info p');
+            const description = descElement ? descElement.textContent.toLowerCase() : '';
 
             const matchesCategory = (currentFilter === 'all' || category === currentFilter);
             const matchesSearch = (searchQuery === '' || title.includes(searchQuery) || description.includes(searchQuery));
