@@ -53,7 +53,7 @@
                                     $isLocked = $sesi->is_locked;
                                     // Pointer-events-none disables clicking if locked
                                 @endphp
-                                <a href="{{ $isLocked ? '#' : route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $sesi->id]) }}" class="text-decoration-none {{ $isLocked ? 'pe-none' : '' }}">
+                                <a href="{{ $isLocked ? '#' : route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $sesi->id]) }}" data-url="{{ route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $sesi->id]) }}" class="text-decoration-none {{ $isLocked ? 'pe-none' : '' }}">
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-3 {{ $isActive ? 'bg-gray-100 border-start border-4 border-primary fixed-style' : '' }}">
                                         <div class="d-flex align-items-center">
                                             <div class="icon icon-shape icon-sm shadow border-radius-sm {{ $isActive ? 'bg-gradient-primary' : ($isLocked ? 'bg-light' : 'bg-gradient-secondary') }} text-center me-3 d-flex align-items-center justify-content-center">
@@ -165,9 +165,34 @@
             }).then(response => response.json())
               .then(data => {
                   if(data.success) {
-                      alert('🎉 Luar Biasa! Anda sukses menyelesaikan tontonan durasi wajib Sesi ini. Materi berikutnya kini terbuka.');
-                      // Refresh otomatis membuka gembok
-                      window.location.reload(); 
+                      // Cari link Sesi terkunci pertama di sidebar
+                      let nextLockedLink = document.querySelector('.pe-none');
+                      if (nextLockedLink && nextLockedLink.hasAttribute('data-url')) {
+                          nextLockedLink.href = nextLockedLink.getAttribute('data-url');
+                          nextLockedLink.classList.remove('pe-none');
+                          
+                          // Ubah ikon gembok menjadi ikon play (warna hijau)
+                          let iconDiv = nextLockedLink.querySelector('.icon-shape');
+                          if (iconDiv) {
+                              iconDiv.classList.remove('bg-light', 'bg-gradient-secondary');
+                              iconDiv.classList.add('bg-gradient-success');
+                              iconDiv.innerHTML = '<i class="fas fa-play text-white opacity-10" style="font-size: 0.7rem;"></i>';
+                          }
+                          
+                          // Ubah teks "Terkunci" menjadi Badge Pop-up Merah
+                          let titleSpan = nextLockedLink.querySelector('h6');
+                          if (titleSpan) {
+                              titleSpan.classList.remove('opacity-6');
+                          }
+                          let statusSpan = nextLockedLink.querySelector('span.text-xs');
+                          if (statusSpan) {
+                              statusSpan.innerHTML = '<span class="badge bg-danger border-radius-sm">Terbuka</span>';
+                              statusSpan.classList.remove('text-secondary', 'opacity-6', 'text-primary');
+                          }
+                      }
+                      
+                      // Beri tahu user secara halus (tanpa interupsi alert)
+                      console.log('Sesi berikutnya berhasil dibuka!');
                   }
               }).catch(err => console.error(err));
         }
