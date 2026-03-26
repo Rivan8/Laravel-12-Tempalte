@@ -14,7 +14,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 
-    <!-- Core CDNs (Force loaded to ensure landing page design stability regardless of local Vite cache) -->
+    <!-- Core CDNs (Force loaded to ensure landing page design stability) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
@@ -28,16 +28,8 @@
                     },
                     colors: {
                         orange: {
-                            50: '#fff7ed',
-                            100: '#ffedd5',
-                            200: '#fed7aa',
-                            300: '#fdba74',
-                            400: '#fb923c',
-                            500: '#f97316',
-                            600: '#ea580c',
-                            700: '#c2410c',
-                            800: '#9a3412',
-                            900: '#7c2d12',
+                            50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+                            500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12',
                         },
                     }
                 }
@@ -48,18 +40,9 @@
     <style>
         body { background-color: #fffcf8; }
 
-        @keyframes gentleRise {
-            0%, 100% { transform: translateY(-3px); }
-            50% { transform: translateY(3px); }
-        }
-        @keyframes floatHeaven {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(1deg); }
-        }
-        @keyframes glowSoft {
-            0%, 100% { opacity: 0.3; transform: scale(1); filter: blur(30px); }
-            50% { opacity: 0.5; transform: scale(1.05); filter: blur(40px); }
-        }
+        @keyframes gentleRise { 0%, 100% { transform: translateY(-3px); } 50% { transform: translateY(3px); } }
+        @keyframes floatHeaven { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(1deg); } }
+        @keyframes glowSoft { 0%, 100% { opacity: 0.3; transform: scale(1); filter: blur(30px); } 50% { opacity: 0.5; transform: scale(1.05); filter: blur(40px); } }
         
         .animate-gentle-rise { animation: gentleRise 4s ease-in-out infinite; }
         .animate-float-heaven { animation: floatHeaven 8s ease-in-out infinite; }
@@ -70,11 +53,7 @@
             background: linear-gradient(135deg, #ffffff 0%, #fffaf5 100%);
             border: 1px solid #ffedd5;
         }
-        .verse-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px -10px rgba(234, 88, 12, 0.15);
-            border-color: #fdba74;
-        }
+        .verse-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px -10px rgba(234, 88, 12, 0.15); border-color: #fdba74; }
         
         .bg-spiritual-pattern {
             background-image: radial-gradient(#fb923c 0.5px, transparent 0.5px), radial-gradient(#fb923c 0.5px, #fffcf8 0.5px);
@@ -86,12 +65,9 @@
 
 <body class="antialiased text-slate-800" x-data="{ mobileMenuOpen: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
 
-    <!-- Navbar -->
-    <header
-        class="fixed w-full top-0 z-50 transition-all duration-300 border-b bg-white/90 py-5 border-transparent"
+    <header class="fixed w-full top-0 z-50 transition-all duration-300 border-b bg-white/90 py-5 border-transparent"
         :class="scrolled ? '!bg-white !shadow-md !py-3 !border-orange-100' : 'bg-white/90 py-5 border-transparent'"
-        style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);"
-    >
+        style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -108,8 +84,8 @@
                 <!-- Desktop Navigation -->
                 @if (Route::has('login'))
                 <nav class="hidden md:flex items-center gap-8 font-medium">
+                    <a href="#profile" class="text-slate-600 hover:text-orange-600 transition-colors">Profil</a>
                     <a href="#program" class="text-slate-600 hover:text-orange-600 transition-colors">Program</a>
-                    <a href="#verses" class="text-slate-600 hover:text-orange-600 transition-colors">Firman</a>
 
                     <div class="h-6 w-px bg-slate-200"></div>
 
@@ -136,23 +112,11 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation -->
-        <div
-            x-show="mobileMenuOpen"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 -translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-150"
-            x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 -translate-y-4"
-            class="md:hidden bg-white border-b border-slate-200 absolute top-full left-0 w-full shadow-xl"
-        >
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden bg-white border-b border-slate-200 absolute top-full left-0 w-full shadow-xl">
             <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#profile" @click="mobileMenuOpen = false" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-all">Profil</a>
                 <a href="#program" @click="mobileMenuOpen = false" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-all">Program</a>
-                <a href="#verses" @click="mobileMenuOpen = false" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-orange-50 hover:text-orange-600 font-medium transition-all">Firman</a>
-
                 <div class="h-px bg-slate-100 my-4 mx-4"></div>
-
                 @auth
                     <a href="{{ url('/dashboard') }}" class="block px-4 py-3 rounded-xl bg-orange-50 text-orange-700 font-bold text-center">Dashboard</a>
                 @else
@@ -163,17 +127,15 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <main class="pt-24 sm:pt-28">
+        
+        <!-- Hero Section -->
         <section class="relative overflow-hidden bg-transparent min-h-screen sm:min-h-[90vh] flex items-center">
-            <!-- Background Ornaments -->
             <div class="absolute rounded-full bg-orange-100/60 pointer-events-none z-0" style="top: -8rem; right: -8rem; width: 500px; height: 500px; filter: blur(80px);"></div>
             <div class="absolute rounded-full bg-amber-200/40 pointer-events-none z-0" style="top: 50%; left: -8rem; width: 400px; height: 400px; filter: blur(80px);"></div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 lg:py-0 w-full">
                 <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-
-                    <!-- Left Copy -->
                     <div class="max-w-2xl text-center lg:text-left mx-auto lg:mx-0">
                         <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-orange-50 border border-orange-200 text-orange-700 font-medium text-sm mb-8 shadow-sm">
                             <span class="flex h-2.5 w-2.5 relative">
@@ -197,38 +159,19 @@
                                 Mulai Perjalanan Baru
                                 <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                             </a>
-                            <a href="#program" class="inline-flex justify-center items-center px-8 py-4 rounded-full bg-white border-2 border-slate-200 text-slate-700 font-bold text-lg hover:border-orange-500 hover:text-orange-600 transition-all">
-                                Jelajahi Kelas
+                            <a href="#profile" class="inline-flex justify-center items-center px-8 py-4 rounded-full bg-white border-2 border-slate-200 text-slate-700 font-bold text-lg hover:border-orange-500 hover:text-orange-600 transition-all">
+                                Pelajari Sistem Kami
                             </a>
-                        </div>
-
-                        <!-- Mini Stats -->
-                        <div class="mt-14 flex flex-wrap items-center justify-center lg:justify-start gap-8 text-sm text-slate-500 font-bold tracking-widest uppercase">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 border border-orange-100">
-                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                </div>
-                                <span class="leading-tight">Alkitabiah<br/>& Murni</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 border border-amber-100">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                </div>
-                                <span class="leading-tight">Sistem<br/>Terstruktur</span>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Right Image Grid -->
                     <div class="relative w-full h-96 sm:h-[500px] lg:h-[600px] hidden lg:block">
-                        <!-- Main Image Card -->
                         <div class="absolute top-1/2 right-4 transform -translate-y-1/2 w-4/5 h-[420px] bg-white rounded-3xl shadow-2xl p-3 z-20 animate-float-heaven border border-orange-50">
                             <div class="w-full h-full relative overflow-hidden rounded-2xl">
                                 <img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80" alt="Spiritual journey" class="w-full h-full object-cover" />
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                             </div>
 
-                            <!-- Floating Badge 1 -->
                             <div class="absolute -bottom-6 -left-8 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-gentle-rise" style="animation-delay: 1s;">
                                 <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold text-lg">
                                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -238,26 +181,10 @@
                                     <p class="font-heading font-bold text-slate-900 text-xl leading-none">Spiritual</p>
                                 </div>
                             </div>
-
-                            <!-- Floating Badge 2 -->
-                            <div class="absolute -top-6 -right-6 bg-white px-5 py-4 rounded-2xl shadow-xl flex flex-col gap-2 animate-gentle-rise border border-slate-50">
-                                <p class="text-xs uppercase tracking-widest text-slate-500 font-bold" style="font-size: 10px;">Komunitas Kita</p>
-                                <div class="flex items-center gap-3">
-                                    <div class="flex -space-x-2">
-                                        <img class="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1544281679-0524cb51b7eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Community">
-                                        <img class="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Student">
-                                        <div class="w-8 h-8 rounded-full border-2 border-white bg-orange-100 flex items-center justify-center text-xs font-bold text-orange-700" style="font-size: 10px;">+1k</div>
-                                    </div>
-                                    <div class="text-sm font-bold text-slate-800">Murid</div>
-                                </div>
-                            </div>
                         </div>
-
-                        <!-- Accent Blobs -->
                         <div class="absolute top-1/4 right-0 w-72 h-72 bg-amber-400 rounded-full mix-blend-multiply opacity-30 animate-float-heaven" style="filter: blur(60px); animation-delay: 2s;"></div>
                         <div class="absolute bottom-10 left-10 w-80 h-80 bg-orange-400 rounded-full mix-blend-multiply opacity-30 animate-float-heaven" style="filter: blur(60px); animation-delay: 3s;"></div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -272,7 +199,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-y-12 md:gap-y-0 text-center md:divide-x divide-white/10" style="border-color: rgba(255,255,255,0.1);">
                     <div class="px-4 border-r border-white/10 md:border-r-0" style="border-color: rgba(255,255,255,0.1);">
-                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 shadow-orange-500/20 drop-shadow-lg">3+</p>
+                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 shadow-orange-500/20 drop-shadow-lg">4+</p>
                         <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Jenjang Kelas</p>
                     </div>
                     <div class="px-4 md:border-r-0">
@@ -280,161 +207,210 @@
                         <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Akses Online</p>
                     </div>
                     <div class="px-4 border-r border-white/10 md:border-r-0 pt-8 md:pt-0 border-t md:border-t-0 border-white/10 md:border-l-0" style="border-color: rgba(255,255,255,0.1);">
-                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 drop-shadow-lg">Materi</p>
-                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Eksklusif Terbaru</p>
+                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 drop-shadow-lg">Hybrid</p>
+                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Belajar Aktif</p>
                     </div>
                     <div class="px-4 pt-8 md:pt-0 border-t border-white/10 md:border-t-0" style="border-color: rgba(255,255,255,0.1);">
                         <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 drop-shadow-lg">24/7</p>
-                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Platform Aktif</p>
+                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Platform Terpadu</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bible Verses Section -->
-        <section id="verses" class="py-28 relative overflow-hidden bg-spiritual-pattern" style="opacity: 0.95;">
-             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                 <div class="flex flex-col md:flex-row items-center justify-between mb-20 gap-10">
-                     <div class="max-w-xl text-center md:text-left">
-                         <h2 class="text-orange-600 font-bold uppercase mb-5 text-sm flex items-center justify-center md:justify-start gap-4" style="letter-spacing: 0.25em;">
-                             <span class="w-12 h-0.5 bg-orange-300 rounded-full"></span> Makanan Rohani <span class="w-12 h-0.5 bg-orange-300 rounded-full md:hidden"></span>
-                         </h2>
-                         <h3 class="text-4xl md:text-5xl font-heading font-extrabold text-slate-900 leading-tight">
-                             Fondasi Kita dalam <br/>
-                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Belajar & Bertumbuh</span>
-                         </h3>
-                     </div>
-                     <div class="relative group w-full md:w-auto">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-orange-400 to-amber-400 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-                        <div class="relative px-7 py-7 bg-white ring-1 ring-orange-100 rounded-2xl shadow-xl flex flex-col sm:flex-row items-center sm:divide-x divide-y sm:divide-y-0 divide-orange-100 gap-5 sm:gap-0">
-                            <div class="flex items-center space-x-4 sm:pr-8 text-center sm:text-left">
-                                <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0 text-orange-600">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                </div>
-                                <span class="text-slate-700 italic font-heading text-lg">"Bertumbuh dalam pengenalan akan Tuhan."</span>
-                            </div>
-                            <div class="sm:pl-8 pt-5 sm:pt-0 text-orange-600 font-bold whitespace-nowrap tracking-wider">2 Petrus 3:18</div>
-                        </div>
-                     </div>
-                 </div>
+        <!-- NEW: Profil Learning Center & Metode Belajar -->
+        <section id="profile" class="py-24 bg-white relative overflow-hidden">
+            <!-- Background Decoration -->
+            <div class="absolute top-0 right-0 bg-orange-50/80 rounded-full pointer-events-none" style="filter: blur(120px); width: 500px; height: 500px;"></div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Verse Card 1 -->
-                    <div class="verse-card p-10 rounded-3xl" style="border-radius: 2rem;">
-                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-orange-500 shadow-md mb-8 border border-orange-50">
-                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path></svg>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-4xl mx-auto mb-16">
+                    <h2 class="text-orange-600 font-bold uppercase mb-4 text-sm flex items-center justify-center gap-3" style="letter-spacing: 0.2em;">
+                        <span class="w-10 h-0.5 bg-orange-300"></span> Profil Learning Center <span class="w-10 h-0.5 bg-orange-300"></span>
+                    </h2>
+                    <h3 class="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
+                        Dua Titik Fokus Pertumbuhan Kehidupan Keimanan Jemaat
+                    </h3>
+                    <p class="text-lg text-slate-500 font-light mb-8 max-w-3xl mx-auto">
+                        Learning Center kami dirancang khusus sebagai sarana bagi jemaat yang ingin bertumbuh. Kami memfasilitasi Anda melalui dua jalur utama: menjadi pemimpin yang efektif atau memperdalam iman spiritual secara personal.
+                    </p>
+                </div>
+
+                <!-- Two Growth Paths -->
+                <div class="grid md:grid-cols-2 gap-8 mb-20 relative z-10">
+                    <!-- Path 1: Kepemimpinan -->
+                    <div class="bg-gradient-to-br from-orange-50 to-white rounded-[2rem] p-8 md:p-10 border border-orange-100 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+                        <div class="w-16 h-16 bg-white text-orange-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-orange-200">
+                            <!-- Leader Icon -->
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         </div>
-                        <p class="text-slate-700 leading-relaxed mb-8 font-heading text-xl font-medium italic">
-                            "Takut akan TUHAN adalah permulaan pengetahuan, tetapi orang bodoh menghina hikmat dan didikan."
+                        <h4 class="text-2xl font-heading font-bold text-slate-900 mb-3">Jalur Kepemimpinan Sel</h4>
+                        <p class="text-slate-600 font-light leading-relaxed mb-6">
+                            Bagi jemaat yang terpanggil untuk menjadi <strong>Pemimpin Kelompok Sel</strong> yang efektif. Anda akan diperlengkapi dengan kurikulum kepemimpinan dan teknik fasilitasi yang aplikatif.
                         </p>
-                        <div class="pt-6 border-t border-orange-100 flex items-center gap-3">
-                            <div class="w-8 h-0.5 bg-orange-400"></div>
-                            <p class="font-bold text-orange-600 tracking-wider">Amsal 1:7</p>
+                        <div class="flex gap-3 flex-wrap">
+                            <span class="px-5 py-2 bg-orange-600 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md">Kelas CTT</span>
+                            <span class="px-5 py-2 bg-orange-600 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md">Kelas DMT</span>
                         </div>
                     </div>
 
-                    <!-- Verse Card 2 -->
-                    <div class="verse-card bg-gradient-to-br from-orange-600 to-amber-600 p-10 rounded-3xl text-white shadow-xl transform hover:-translate-y-2 transition-transform duration-500 border-none" style="border-radius: 2rem; box-shadow: 0 20px 25px -5px rgba(249, 115, 22, 0.2);">
-                        <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white shadow-sm mb-8 backdrop-blur-md border border-white/30">
-                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path></svg>
+                    <!-- Path 2: Pertumbuhan Iman -->
+                    <div class="bg-gradient-to-br from-amber-50 to-white rounded-[2rem] p-8 md:p-10 border border-amber-100 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+                        <div class="w-16 h-16 bg-white text-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-amber-200">
+                            <!-- Spritual Icon -->
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         </div>
-                        <p class="text-white leading-relaxed mb-8 font-heading text-xl font-medium italic">
-                            "Hati orang berpengertian memperoleh pengetahuan, dan telinga orang bijak menuntut pengetahuan."
+                        <h4 class="text-2xl font-heading font-bold text-slate-900 mb-3">Jalur Pertumbuhan Iman</h4>
+                        <p class="text-slate-600 font-light leading-relaxed mb-6">
+                            Bagi seluruh jemaat yang rindu untuk mendalami kebenaran Firman, memulihkan kerohanian, dan bertumbuh dalam pengenalan akan Tuhan secara intensional.
                         </p>
-                        <div class="pt-6 border-t border-white/20 flex items-center gap-3">
-                            <div class="w-8 h-0.5 bg-white text-white"></div>
-                            <p class="font-bold text-white tracking-wider">Amsal 18:15</p>
-                        </div>
-                    </div>
-
-                    <!-- Verse Card 3 -->
-                    <div class="verse-card p-10 rounded-3xl" style="border-radius: 2rem;">
-                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-orange-500 shadow-md mb-8 border border-orange-50">
-                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path></svg>
-                        </div>
-                        <p class="text-slate-700 leading-relaxed mb-8 font-heading text-xl font-medium italic">
-                            "Berilah orang bijak nasihat, maka ia akan menjadi lebih bijak, ajarilah orang benar..."
-                        </p>
-                        <div class="pt-6 border-t border-orange-100 flex items-center gap-3">
-                            <div class="w-8 h-0.5 bg-orange-400"></div>
-                            <p class="font-bold text-orange-600 tracking-wider">Amsal 9:9</p>
+                        <div class="flex gap-3 flex-wrap items-center">
+                            <span class="px-5 py-2 bg-amber-500 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md">Kelas FC 1</span>
+                            <span class="px-5 py-2 bg-amber-500 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-md">Kelas FC 2</span>
+                            <span class="px-4 text-amber-700 text-xs font-bold tracking-wider">& Seterusnya</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Explanation of Hybrid Approach -->
+                <div class="bg-slate-900 rounded-[2.5rem] p-8 md:p-14 border border-slate-800 shadow-2xl relative overflow-hidden" style="background-color: #1c1917;">
+                    <!-- Light Glow -->
+                    <div class="absolute top-0 right-0 rounded-full opacity-20 pointer-events-none" style="background-color: #f97316; filter: blur(100px); width: 400px; height: 400px; transform: translate(30%, -30%);"></div>
+                    
+                    <div class="flex flex-col lg:flex-row gap-12 items-center relative z-10">
+                        <!-- Text -->
+                        <div class="flex-1">
+                            <span class="inline-block py-1.5 px-4 rounded-full bg-orange-500/20 text-orange-400 font-bold uppercase tracking-widest mb-4" style="font-size: 10px;">SISTEM KAMI</span>
+                            <h4 class="text-3xl md:text-4xl font-heading font-bold text-white mb-6 leading-tight">Semua Dimulai Lewat Ruang Layar, Disempurnakan di <span class="text-orange-400">Ruang Pertemuan</span></h4>
+                            <p class="text-slate-300 font-light leading-relaxed mb-6">
+                                Pemuridan tidak sempurna jika hanya dilakukan secara mandiri. Untuk itu, setiap jemaat menggunakan sistem **Hybrid Learning** yang wajib diikuti.
+                            </p>
+                            <p class="text-slate-300 font-light leading-relaxed">
+                                Setelah Anda menyelesaikan seluruh kurikulum video dan materi di <strong>Kelas Online</strong>, Anda DIHARUSKAN hadir pada pertemuan langsung (<strong>Kelas Onsite</strong>). Di sanalah fasilitator kami mendampingi diskusi mendalam agar kebenaran online menjadi aplikasi yang nyata.
+                            </p>
+                        </div>
+                        
+                        <!-- Visual representation of flow -->
+                        <div class="flex-1 w-full flex flex-col gap-3">
+                            <!-- Step 1 (Online) -->
+                            <div class="bg-white/10 rounded-2xl p-6 border border-white/10 flex items-start gap-5 transform transition hover:-translate-y-1 backdrop-blur-sm">
+                                <div class="w-12 h-12 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xl flex-shrink-0 border border-orange-500/30">1</div>
+                                <div>
+                                    <h5 class="font-bold text-white text-lg mb-1">Eksplorasi Kelas Online</h5>
+                                    <p class="text-sm text-slate-300 font-light leading-relaxed">Pahami panduan melalui video interaktif, kuis, dan jurnal pembelajaran mandiri. Selesaikan hingga tuntas 100%.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Down Arrow indicator -->
+                            <div class="flex justify-center -my-3 opacity-60 relative z-20">
+                                <div class="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center border-4 border-[#1c1917]">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2 (Onsite) -->
+                            <div class="bg-gradient-to-br from-orange-600 to-orange-500 rounded-2xl p-6 shadow-xl flex items-start gap-5 transform transition hover:-translate-y-1">
+                                <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center font-bold text-xl flex-shrink-0 border border-white/30 backdrop-blur-sm shadow-inner">2</div>
+                                <div>
+                                    <h5 class="font-bold text-white text-lg mb-1">Diskusi & Fasilitasi Onsite</h5>
+                                    <p class="text-sm text-orange-100 font-light leading-relaxed">Akses ke kelas fisik akan terbuka. Bergabunglah untuk membahas, berbagi, dan di-fasilitasi dengan para mentor kami.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <!-- Program Section -->
-        <section id="program" class="py-28 bg-white relative overflow-hidden text-center md:text-left">
-            <!-- Background Decoration -->
+        <!-- Program Section (Refactored to 4 Stages) -->
+        <section id="program" class="py-28 relative overflow-hidden text-center md:text-left" style="background-color: #fffcf8;">
             <div class="absolute top-0 right-0 bg-orange-50/80 rounded-full pointer-events-none" style="filter: blur(120px); width: 600px; height: 600px;"></div>
-            <div class="absolute bottom-0 left-0 bg-amber-50/50 rounded-full pointer-events-none" style="filter: blur(100px); width: 400px; height: 400px;"></div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="text-center max-w-3xl mx-auto mb-20">
                     <h2 class="text-orange-600 font-bold uppercase mb-4 text-sm flex items-center justify-center gap-3" style="letter-spacing: 0.2em;">
-                        <span class="w-10 h-0.5 bg-orange-300"></span> Kurikulum Kami <span class="w-10 h-0.5 bg-orange-300"></span>
+                        <span class="w-10 h-0.5 bg-orange-300"></span> Kurikulum Detail <span class="w-10 h-0.5 bg-orange-300"></span>
                     </h2>
                     <h3 class="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
-                        Sistem Edukasi Terstruktur
+                        Rincian Empat Tahap Pembelajaran
                     </h3>
                     <p class="text-lg text-slate-500 font-light">
-                        Disusun secara sistematis agar setiap individu dapat bertumbuh dari dasar keyakinan hingga menjadi pemimpin di dalam Tuhan.
+                        Pembelajaran dibagi ke dalam empat level yang sistematis sesuai dengan kerinduan dan kesiapan tahapan Anda.
                     </p>
                 </div>
 
-                <div class="grid md:grid-cols-3 gap-8 xl:gap-10 relative">
-                    <!-- Card 1 -->
-                    <div class="relative bg-white p-10 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-4 group overflow-hidden" style="border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -mr-16 -mt-16 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
+                <!-- 4 Columns Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8 relative">
+                    <!-- Card 1: Dasar -->
+                    <div class="relative bg-white p-8 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-3 group overflow-hidden flex flex-col h-full" style="border-radius: 2rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -mr-12 -mt-12 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
 
-                        <div class="w-16 h-16 bg-white text-orange-500 rounded-2xl flex items-center justify-center mb-8 border border-orange-100 transition-all duration-300 shadow-sm relative z-10 hover:bg-orange-500 hover:text-white">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        <div class="w-14 h-14 bg-white text-orange-500 rounded-2xl flex items-center justify-center mb-6 border border-orange-100 transition-all duration-300 shadow-sm relative z-10 group-hover:bg-orange-500 group-hover:text-white">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         </div>
 
-                        <h4 class="text-2xl font-heading font-bold text-slate-900 mb-4 transition-colors relative z-10 hover:text-orange-600">Equip - New</h4>
-                        <p class="text-slate-500 leading-relaxed mb-10 relative z-10 font-light">
-                            Membangun pondasi rohani lewat <strong class="text-slate-700 font-semibold">Membership Class</strong> dan <strong class="text-slate-700 font-semibold">Foundation Class</strong>. Memahami dasar keselamatan dan iman Kristen.
+                        <h4 class="text-xl font-heading font-bold text-slate-900 mb-3 transition-colors relative z-10 group-hover:text-orange-600">Tahap Dasar</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-8 relative z-10 font-light flex-grow">
+                            Membangun fondasi awal melalui <strong class="text-slate-700 font-semibold">Membership Class</strong> dan <strong class="text-slate-700 font-semibold">Foundation Class 1</strong>. Memahami dasar keselamatan & iman Kristen.
                         </p>
 
                         <div class="relative z-10 mt-auto">
-                            <span class="inline-flex py-2 px-5 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-orange-700" style="font-size: 10px; letter-spacing: 0.1em;">Tahap 1 | Dasar</span>
+                            <span class="inline-flex py-1.5 px-4 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors group-hover:border-orange-200 group-hover:bg-orange-50 group-hover:text-orange-700" style="font-size: 10px; letter-spacing: 0.1em;">Level 1</span>
                         </div>
                     </div>
 
-                    <!-- Card 2 -->
-                    <div class="relative bg-white p-10 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-4 group overflow-hidden" style="border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-100/50 rounded-bl-full -mr-16 -mt-16 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
+                    <!-- Card 2: Tertanam -->
+                    <div class="relative bg-white p-8 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-3 group overflow-hidden flex flex-col h-full" style="border-radius: 2rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-orange-100/50 rounded-bl-full -mr-12 -mt-12 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
 
-                        <div class="w-16 h-16 bg-white text-orange-600 rounded-2xl flex items-center justify-center mb-8 border border-orange-200 transition-all duration-300 shadow-md relative z-10 hover:bg-orange-600 hover:text-white">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <div class="w-14 h-14 bg-white text-orange-600 rounded-2xl flex items-center justify-center mb-6 border border-orange-200 transition-all duration-300 shadow-md relative z-10 group-hover:bg-orange-600 group-hover:text-white">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                         </div>
 
-                        <h4 class="text-2xl font-heading font-bold text-slate-900 mb-4 transition-colors relative z-10 hover:text-orange-600">Equip - Grow</h4>
-                        <p class="text-slate-500 leading-relaxed mb-10 relative z-10 font-light">
-                            Pendalaman rohani melalui <strong class="text-slate-700 font-semibold">Grade 1 (The Cross)</strong> dan <strong class="text-slate-700 font-semibold">Grade 2 (The Power)</strong>. Mengalami kuasa salib dan Roh Kudus.
+                        <h4 class="text-xl font-heading font-bold text-slate-900 mb-3 transition-colors relative z-10 group-hover:text-orange-600">Tahap Tertanam</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-8 relative z-10 font-light flex-grow">
+                            Pengakaran mendalam pada kebenaran firman Tuhan melalui <strong class="text-slate-700 font-semibold">Foundation Class 2</strong> dan <strong class="text-slate-700 font-semibold">Foundation Class 3</strong>.
                         </p>
 
                         <div class="relative z-10 mt-auto">
-                            <span class="inline-flex py-2 px-5 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-orange-700" style="font-size: 10px; letter-spacing: 0.1em;">Tahap 2 | Pertumbuhan</span>
+                            <span class="inline-flex py-1.5 px-4 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors group-hover:border-orange-200 group-hover:bg-orange-50 group-hover:text-orange-700" style="font-size: 10px; letter-spacing: 0.1em;">Level 2</span>
                         </div>
                     </div>
 
-                    <!-- Card 3 -->
-                    <div class="relative bg-white p-10 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-4 group overflow-hidden" style="border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -mr-16 -mt-16 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
+                    <!-- Card 3: Pertumbuhan -->
+                    <div class="relative bg-white p-8 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-3 group overflow-hidden flex flex-col h-full" style="border-radius: 2rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-12 -mt-12 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
 
-                        <div class="w-16 h-16 bg-white text-amber-500 rounded-2xl flex items-center justify-center mb-8 border border-amber-100 transition-all duration-300 shadow-sm relative z-10 hover:bg-amber-500 hover:text-white">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <div class="w-14 h-14 bg-white text-amber-500 rounded-2xl flex items-center justify-center mb-6 border border-amber-100 transition-all duration-300 shadow-sm relative z-10 group-hover:bg-amber-500 group-hover:text-white">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path></svg>
                         </div>
 
-                        <h4 class="text-2xl font-heading font-bold text-slate-900 mb-4 transition-colors relative z-10 hover:text-amber-600">Equip - Lead</h4>
-                        <p class="text-slate-500 leading-relaxed mb-10 relative z-10 font-light">
-                            Berakar untuk berbuah lewat <strong class="text-slate-700 font-semibold">Volunteer Class</strong> dan <strong class="text-slate-700 font-semibold">Leadership Class</strong>. Dipersiapkan menjadi pemimpin yang berdampak.
+                        <h4 class="text-xl font-heading font-bold text-slate-900 mb-3 transition-colors relative z-10 group-hover:text-amber-600">Tahap Pertumbuhan</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-8 relative z-10 font-light flex-grow">
+                            Pendalaman rohani intensional lewat <strong class="text-slate-700 font-semibold">Grade 1 & 2</strong> untuk melepaskan belenggu dan mengalami kuasa salib sepenuhnya.
                         </p>
 
                         <div class="relative z-10 mt-auto">
-                            <span class="inline-flex py-2 px-5 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700" style="font-size: 10px; letter-spacing: 0.1em;">Tahap 3 | Dampak</span>
+                            <span class="inline-flex py-1.5 px-4 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors group-hover:border-amber-200 group-hover:bg-amber-50 group-hover:text-amber-700" style="font-size: 10px; letter-spacing: 0.1em;">Level 3</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Dampak -->
+                    <div class="relative bg-white p-8 shadow-xl border border-slate-100 z-10 transition-all duration-500 hover:-translate-y-3 group overflow-hidden flex flex-col h-full" style="border-radius: 2rem; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.4);">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-100/50 rounded-bl-full -mr-12 -mt-12 transition-all duration-700 ease-out z-0" style="transform: scale(1);" onMouseOver="this.style.transform='scale(2)'" onMouseOut="this.style.transform='scale(1)'"></div>
+
+                        <div class="w-14 h-14 bg-white text-amber-600 rounded-2xl flex items-center justify-center mb-6 border border-amber-200 transition-all duration-300 shadow-sm relative z-10 group-hover:bg-amber-600 group-hover:text-white">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+
+                        <h4 class="text-xl font-heading font-bold text-slate-900 mb-3 transition-colors relative z-10 group-hover:text-amber-700">Tahap Dampak</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-8 relative z-10 font-light flex-grow">
+                            Berdampak bagi orang lain melalui partisipasi pelayanan dan kepemimpinan berkelipatan lewat <strong class="text-slate-700 font-semibold">Leadership Class (CTT & DMT)</strong>.
+                        </p>
+
+                        <div class="relative z-10 mt-auto">
+                            <span class="inline-flex py-1.5 px-4 rounded-full bg-slate-50 text-slate-600 font-bold uppercase border border-slate-100 transition-colors group-hover:border-amber-200 group-hover:bg-amber-50 group-hover:text-amber-700" style="font-size: 10px; letter-spacing: 0.1em;">Level 4</span>
                         </div>
                     </div>
                 </div>
@@ -442,7 +418,7 @@
         </section>
 
         <!-- Dynamic CTA -->
-        <section class="py-24 relative" style="background-color: #fffcf8;">
+        <section class="py-24 relative" style="background-color: #ffffff;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="relative bg-orange-600 overflow-hidden shadow-2xl" style="border-radius: 3rem;">
                     <!-- Dynamic BG -->
@@ -456,10 +432,10 @@
                     <div class="relative z-10 p-12 lg:p-20 flex flex-col lg:flex-row items-center justify-between text-center lg:text-left gap-10">
                         <div class="max-w-3xl">
                             <h2 class="text-4xl md:text-5xl font-heading font-extrabold text-white mb-6 leading-tight">
-                                Siap Untuk Bertumbuh?
+                                Mulai Perjalanan Baru
                             </h2>
                             <p class="text-orange-100 text-lg md:text-xl mb-0 max-w-2xl font-light">
-                                Bergabunglah bersama ratusan jemaat lainnya dan mulailah perjalanan kedewasaan rohani Anda hari ini.
+                                Bergabunglah bersama ratusan jemaat lainnya. Tingkatkan kualitas rohani dan jadilah saluran berkat melalui proses pemuridan ini.
                             </p>
                         </div>
                         <div class="flex-shrink-0">
@@ -493,6 +469,7 @@
                 <div>
                     <h4 class="font-bold text-slate-900 mb-6 uppercase tracking-widest" style="font-size: 11px;">Tautan Cepat</h4>
                     <ul class="space-y-4">
+                        <li><a href="#profile" class="text-slate-500 hover:text-orange-600 font-medium transition-colors">Profil Pembelajaran</a></li>
                         <li><a href="#program" class="text-slate-500 hover:text-orange-600 font-medium transition-colors">Program Kelas</a></li>
                         <li><a href="{{ route('login') }}" class="text-slate-500 hover:text-orange-600 font-medium transition-colors">Masuk Akun</a></li>
                         <li><a href="{{ route('register') }}" class="text-slate-500 hover:text-orange-600 font-medium transition-colors">Daftar Baru</a></li>
