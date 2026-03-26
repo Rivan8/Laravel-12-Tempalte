@@ -2,10 +2,10 @@
     <div class="sidenav-header" style="height: 70px;">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0 d-flex align-items-center py-3" href="{{ route('dashboard') }}">
-        <div class="icon icon-shape icon-sm shadow-sm border-radius-md bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-            <i class="fas fa-church text-white flex-shrink-0" style="font-size: 13px; margin-top: 1px;"></i>
+        <div class="icon icon-shape icon-sm shadow-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center" style="background-image: linear-gradient(310deg, #fb923c 0%, #ea580c 100%); width: 32px; height: 32px;">
+            <span class="text-white font-weight-bold" style="font-size: 0.85rem; letter-spacing: 0;">ESC</span>
         </div>
-        <span class="ms-1 font-weight-bolder text-dark" style="font-size: 1.05rem; letter-spacing: 0.5px;">ELSHADDAI <span class="text-primary opacity-8">LMS</span></span>
+        <span class="ms-1 font-weight-bolder text-dark" style="font-size: 1.05rem; letter-spacing: -0.5px;">Equip <span style="color: #ea580c;">Discipleship</span></span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">

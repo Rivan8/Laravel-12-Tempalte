@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Equip Discipleship | Elshaddai Learning Center</title>
+    <title>ESC Learning Center</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -142,7 +142,7 @@
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-full w-full bg-orange-500"></span>
                             </span>
-                            Pusat Pembelajaran Rohani & Pemuridan
+                            Selamat Datang di ESC Learning Center
                         </div>
 
                         <h1 class="text-5xl lg:text-6xl xl:text-7xl font-heading font-extrabold text-slate-900 leading-tight mb-8">
