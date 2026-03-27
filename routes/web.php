@@ -4,7 +4,51 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // 1. Hitung User Stats
+    $users = \App\Models\User::with('kelas')->get();
+    
+    $stats = [
+        'users_member' => 0,
+        'users_ctt' => 0,
+        'users_dm' => 0,
+        'users_new' => 0,
+        'users_plant' => 0,
+        'users_grow' => 0,
+        'users_fasilitator' => 0,
+        
+        'kelas_community' => \App\Models\Kelas::where('kategori', 'like', '%Community%')->count(),
+        'kelas_equip_new' => \App\Models\Kelas::where('kategori', 'like', '%Equip - New%')->count(),
+        'kelas_equip_plant' => \App\Models\Kelas::where('kategori', 'like', '%Equip - Plant%')->count(),
+        'kelas_equip_grow' => \App\Models\Kelas::where('kategori', 'like', '%Equip - Grow%')->count(),
+        'kelas_equip_leadership' => \App\Models\Kelas::where('kategori', 'like', '%Leadership%')->count(),
+        'total_kelas' => \App\Models\Kelas::count(),
+    ];
+
+    foreach($users as $user) {
+        if ($user->role === 'Fasilitator') {
+            $stats['users_fasilitator']++;
+        }
+
+        $userStatus = $user->status_user; // calls getStatusUserAttribute()
+        if ($userStatus === 'Disciple Maker (DM)') {
+            $stats['users_dm']++;
+        } elseif ($userStatus === 'Core Team') {
+            $stats['users_ctt']++;
+        } else {
+            $stats['users_member']++;
+        }
+
+        $equipStatus = $user->equip_status; // calls getEquipStatusAttribute()
+        if ($equipStatus === 'New') {
+            $stats['users_new']++;
+        } elseif ($equipStatus === 'Plant') {
+            $stats['users_plant']++;
+        } elseif ($equipStatus === 'Grow') {
+            $stats['users_grow']++;
+        }
+    }
+
+    return view('welcome', compact('stats'));
 });
 
 Route::get('/dashboard', function () {
@@ -39,6 +83,8 @@ Route::middleware('auth')->group(function () {
         Route::get('kelas/{kelas}/materi', [\App\Http\Controllers\AdminMateriController::class, 'index'])->name('materi.index');
         Route::get('kelas/{kelas}/materi/create', [\App\Http\Controllers\AdminMateriController::class, 'create'])->name('materi.create');
         Route::post('kelas/{kelas}/materi', [\App\Http\Controllers\AdminMateriController::class, 'store'])->name('materi.store');
+        Route::get('kelas/{kelas}/materi/{materi}/edit', [\App\Http\Controllers\AdminMateriController::class, 'edit'])->name('materi.edit');
+        Route::put('kelas/{kelas}/materi/{materi}', [\App\Http\Controllers\AdminMateriController::class, 'update'])->name('materi.update');
         Route::delete('kelas/{kelas}/materi/{materi}', [\App\Http\Controllers\AdminMateriController::class, 'destroy'])->name('materi.destroy');
     });
 });

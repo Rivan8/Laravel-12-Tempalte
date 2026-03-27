@@ -85,9 +85,10 @@
                     </ul>
                 </div>
                 <!-- Action Button Quiz Akhir -->
+                @if(!empty($kelas->link_quiz))
                 <div class="card-footer text-center pt-4 border-top">
                     @if(isset($isAllCompleted) && $isAllCompleted && isset($materiList) && $materiList->count() > 0)
-                        <a href="#" class="btn bg-gradient-success w-100 mb-2 shadow position-relative overflow-hidden">
+                        <a href="{{ $kelas->link_quiz }}" target="_blank" class="btn bg-gradient-success w-100 mb-2 shadow position-relative overflow-hidden">
                             <span class="position-relative z-index-1"><i class="fas fa-award me-2"></i> Kuis Ujian Akhir Terbuka</span>
                         </a>
                         <small class="text-xs text-success font-weight-bolder">Selamat! Anda berhak mengikuti ujian ini.</small>
@@ -98,6 +99,7 @@
                         <small class="text-xs text-secondary">Selesaikan seluruh tontonan materi Sesi (80%) di atas terlebih dahulu untuk membuka Ujian Kuis.</small>
                     @endif
                 </div>
+                @endif
             </div>
         </div>
     </div>

@@ -197,22 +197,83 @@
             </div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-y-12 md:gap-y-0 text-center md:divide-x divide-white/10" style="border-color: rgba(255,255,255,0.1);">
-                    <div class="px-4 border-r border-white/10 md:border-r-0" style="border-color: rgba(255,255,255,0.1);">
-                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 shadow-orange-500/20 drop-shadow-lg">4+</p>
-                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Jenjang Kelas</p>
+                <div class="space-y-12">
+                    <!-- Section 1: Demografi Jemaat -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-orange-300/80 uppercase tracking-widest mb-6 flex items-center justify-center gap-3">
+                            <i class="fas fa-users text-orange-400"></i> Demografi Jemaat & Pemuridan
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                            <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition duration-300">
+                                <p class="text-4xl font-heading font-bold text-white mb-1">{{ $stats['users_member'] }}</p>
+                                <p class="text-orange-300 font-medium text-[10px] sm:text-xs uppercase tracking-widest">Total Member</p>
+                            </div>
+                            <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition duration-300">
+                                <p class="text-4xl font-heading font-bold text-white mb-1">{{ $stats['users_ctt'] }}</p>
+                                <p class="text-orange-300 font-medium text-[10px] sm:text-xs uppercase tracking-widest">Core Team (CTT)</p>
+                            </div>
+                            <div class="bg-orange-500/20 backdrop-blur-md border border-orange-500/30 rounded-2xl p-6 text-center shadow-[0_0_20px_rgba(249,115,22,0.15)] hover:bg-orange-500/30 transition duration-300 relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-gradient-to-tr from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                                <p class="text-4xl font-heading font-bold text-orange-400 mb-1 drop-shadow-md position-relative z-10">{{ $stats['users_dm'] }}</p>
+                                <p class="text-orange-200 font-medium text-[10px] sm:text-xs uppercase tracking-widest position-relative z-10">Disciple Maker</p>
+                            </div>
+                            <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition duration-300">
+                                <p class="text-4xl font-heading font-bold text-white mb-1">{{ $stats['users_fasilitator'] }}</p>
+                                <p class="text-orange-300 font-medium text-[10px] sm:text-xs uppercase tracking-widest">Fasilitator</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="px-4 md:border-r-0">
-                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 drop-shadow-lg">100%</p>
-                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Akses Online</p>
-                    </div>
-                    <div class="px-4 border-r border-white/10 md:border-r-0 pt-8 md:pt-0 border-t md:border-t-0 border-white/10 md:border-l-0" style="border-color: rgba(255,255,255,0.1);">
-                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 drop-shadow-lg">Hybrid</p>
-                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Belajar Aktif</p>
-                    </div>
-                    <div class="px-4 pt-8 md:pt-0 border-t border-white/10 md:border-t-0" style="border-color: rgba(255,255,255,0.1);">
-                        <p class="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-orange-400 mb-3 drop-shadow-lg">24/7</p>
-                        <p class="text-slate-300 font-medium text-xs md:text-sm uppercase" style="letter-spacing: 0.2em;">Platform Terpadu</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                        <!-- Section 2: Fase Pertumbuhan -->
+                        <div class="bg-black/20 rounded-3xl p-6 border border-white/5">
+                            <h3 class="text-sm font-semibold text-orange-300/80 uppercase tracking-widest mb-6 flex items-center justify-center lg:justify-start gap-3">
+                                <i class="fas fa-seedling text-orange-400"></i> Distribusi Fase Equip
+                            </h3>
+                            <div class="grid grid-cols-3 gap-3 sm:gap-4">
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-orange-500/30 transition-colors">
+                                    <p class="text-2xl font-bold text-orange-400 mb-1">{{ $stats['users_new'] }}</p>
+                                    <p class="text-slate-300 text-[10px] sm:text-xs uppercase tracking-wider">Fase New</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-orange-500/30 transition-colors">
+                                    <p class="text-2xl font-bold text-orange-400 mb-1">{{ $stats['users_plant'] }}</p>
+                                    <p class="text-slate-300 text-[10px] sm:text-xs uppercase tracking-wider">Fase Plant</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-orange-500/30 transition-colors">
+                                    <p class="text-2xl font-bold text-orange-400 mb-1">{{ $stats['users_grow'] }}</p>
+                                    <p class="text-slate-300 text-[10px] sm:text-xs uppercase tracking-wider">Fase Grow</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Modul Kelas -->
+                        <div class="bg-black/20 rounded-3xl p-6 border border-white/5">
+                            <h3 class="text-sm font-semibold text-orange-300/80 uppercase tracking-widest mb-6 flex items-center justify-center lg:justify-start gap-3">
+                                <i class="fas fa-book-open text-orange-400"></i> Integrasi Kurikulum (Total: {{ $stats['total_kelas'] }})
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-xl font-bold text-white mb-0">{{ $stats['kelas_community'] }}</p>
+                                    <p class="text-slate-400 text-[10px] uppercase">Community</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-xl font-bold text-white mb-0">{{ $stats['kelas_equip_new'] }}</p>
+                                    <p class="text-slate-400 text-[10px] uppercase">Eq: New</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-xl font-bold text-white mb-0">{{ $stats['kelas_equip_plant'] }}</p>
+                                    <p class="text-slate-400 text-[10px] uppercase">Eq: Plant</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-xl font-bold text-white mb-0">{{ $stats['kelas_equip_grow'] }}</p>
+                                    <p class="text-slate-400 text-[10px] uppercase">Eq: Grow</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-xl p-3 text-center sm:col-span-2">
+                                    <p class="text-xl font-bold text-white mb-0">{{ $stats['kelas_equip_leadership'] }}</p>
+                                    <p class="text-slate-400 text-[10px] uppercase">Leadership / DMT</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

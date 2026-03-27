@@ -38,12 +38,17 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $role = 'Member';
+        if ($request->fasilitator_code === env('FASILITATOR_REGISTRATION_CODE', 'FASIL-ELSHADDAI2026')) {
+            $role = 'Fasilitator';
+        }
+
         $user = User::create([
             'nama_lengkap' => $request->nama_lengkap,
             'jenis_kelamin' => $request->jenis_kelamin,
             'email' => $request->email,
             'no_hp' => $request->no_hp,
-            'role' => 'Member',
+            'role' => $role,
             'password' => Hash::make($request->password),
         ]);
 

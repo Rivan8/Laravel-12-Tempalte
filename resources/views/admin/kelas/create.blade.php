@@ -38,6 +38,13 @@
                                 placeholder="Tuliskan ulasan mengenai kurikulum kelas ini..." required></textarea>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label text-sm font-weight-bold">Link Google Form Kuis (Ujian Akhir)</label>
+                            <input type="url" name="link_quiz" class="form-control"
+                                placeholder="Contoh: https://forms.gle/xxxxxx">
+                            <small class="text-secondary mt-1 d-block text-xs">Biarkan kosong jika kelas ini tidak memiliki kuis ujian akhir.</small>
+                        </div>
+
                         <div class="mb-4 bg-light p-3 border-radius-md">
                             <label class="form-label text-dark font-weight-bolder mb-2"><i
                                     class="fas fa-lock text-warning me-2"></i>Persyaratan Keamanan Mengikuti Kelas

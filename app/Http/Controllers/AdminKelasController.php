@@ -30,7 +30,8 @@ class AdminKelasController extends Controller
             'kategori'           => 'required|string|max:255',
             'deskripsi'          => 'required|string',
             'prasyarat_kelas_id' => 'nullable|exists:kelas,id',
-            'gambar'             => 'nullable|string'
+            'gambar'             => 'nullable|string',
+            'link_quiz'          => 'nullable|url'
         ]);
 
         if (empty($validated['gambar'])) {
@@ -61,7 +62,8 @@ class AdminKelasController extends Controller
             'kategori'           => 'required|string|max:255',
             'deskripsi'          => 'required|string',
             'prasyarat_kelas_id' => 'nullable|exists:kelas,id',
-            'gambar'             => 'nullable|string'
+            'gambar'             => 'nullable|string',
+            'link_quiz'          => 'nullable|url'
         ]);
 
         $kelas->update($validated);

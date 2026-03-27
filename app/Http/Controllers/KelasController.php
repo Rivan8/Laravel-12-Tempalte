@@ -27,15 +27,17 @@ class KelasController extends Controller
 
         // Verifikasi Prasyarat Dinamis via Database
         if ($kelas->prasyarat_kelas_id) {
-            $prasyarat = \App\Models\Kelas::find($kelas->prasyarat_kelas_id);
-            $hasCompletedPrasyarat = $user->kelas()
-                ->where('kelas_id', $kelas->prasyarat_kelas_id)
-                ->where('kelas_users.status', 'completed')
-                ->exists();
+            if ($user->role !== 'Fasilitator' && $user->role !== 'Admin') {
+                $prasyarat = \App\Models\Kelas::find($kelas->prasyarat_kelas_id);
+                $hasCompletedPrasyarat = $user->kelas()
+                    ->where('kelas_id', $kelas->prasyarat_kelas_id)
+                    ->where('kelas_users.status', 'completed')
+                    ->exists();
 
-            if (!$hasCompletedPrasyarat) {
-                $namaPrasyarat = $prasyarat ? $prasyarat->nama_kelas : 'Prasyarat sebelumnya';
-                return back()->with('error', 'Anda harus menyelesaikan kelas ' . $namaPrasyarat . ' terlebih dahulu untuk dapat mendaftar kelas ini.');
+                if (!$hasCompletedPrasyarat) {
+                    $namaPrasyarat = $prasyarat ? $prasyarat->nama_kelas : 'Prasyarat sebelumnya';
+                    return back()->with('error', 'Anda harus menyelesaikan kelas ' . $namaPrasyarat . ' terlebih dahulu untuk dapat mendaftar kelas ini.');
+                }
             }
         }
 

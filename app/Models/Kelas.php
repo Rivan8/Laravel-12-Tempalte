@@ -12,6 +12,7 @@ class Kelas extends Model
         'deskripsi',
         'gambar',
         'prasyarat_kelas_id',
+        'link_quiz',
     ];
 
     public function prasyarat()

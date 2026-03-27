@@ -54,13 +54,18 @@
                                         </a>
                                     </td>
                                     <td class="align-middle text-center">
-                                        <form action="{{ route('admin.materi.destroy', ['kelas' => $kelas->id, 'materi' => $m->id]) }}" method="POST" onsubmit="return confirm('Hapus video sesi ini secara permanen?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-link text-danger text-gradient px-2 mb-0 shadow-none">
-                                                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>Hapus
-                                            </button>
-                                        </form>
+                                        <div class="d-flex justify-content-center align-items-center gap-2">
+                                            <a href="{{ route('admin.materi.edit', ['kelas' => $kelas->id, 'materi' => $m->id]) }}" class="btn btn-link text-info text-gradient px-2 mb-0 shadow-none">
+                                                <i class="fas fa-edit me-2" aria-hidden="true"></i>Edit
+                                            </a>
+                                            <form action="{{ route('admin.materi.destroy', ['kelas' => $kelas->id, 'materi' => $m->id]) }}" method="POST" onsubmit="return confirm('Hapus video sesi ini secara permanen?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-link text-danger text-gradient px-2 mb-0 shadow-none">
+                                                    <i class="far fa-trash-alt me-2" aria-hidden="true"></i>Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
