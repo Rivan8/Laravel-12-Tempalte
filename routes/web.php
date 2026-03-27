@@ -73,6 +73,8 @@ Route::middleware('auth')->group(function () {
     
     // Rute Users (Admin Only)
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::post('/users/{user_id}/approve/{kelas_id}', [\App\Http\Controllers\UserController::class, 'approve'])->name('users.approve');
 
     // Admin CMS (Manajemen Kelas & Video)

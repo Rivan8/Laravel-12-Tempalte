@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         // Pastikan hanya Admin yang bisa akses
         if (auth()->user()->role !== 'Admin') abort(403);
@@ -19,7 +19,20 @@ class UserController extends Controller
             ->orderBy('kelas_users.created_at', 'desc')
             ->get();
 
-        $users = \App\Models\User::orderBy('created_at', 'desc')->get();
+        $search = $request->input('search');
+
+        $usersQuery = \App\Models\User::with('kelas')->orderBy('created_at', 'desc');
+
+        if ($search) {
+            $usersQuery->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nama_lengkap', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('no_hp', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $usersQuery->paginate(10);
 
         return view('users.index', compact('requests', 'users'));
     }
@@ -37,5 +50,27 @@ class UserController extends Controller
             ]);
 
         return back()->with('success', 'Request kelas berhasil disetujui.');
+    }
+
+    public function edit(\App\Models\User $user)
+    {
+        if (auth()->user()->role !== 'Admin') abort(403);
+
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, \App\Models\User $user)
+    {
+        if (auth()->user()->role !== 'Admin') abort(403);
+
+        $validated = $request->validate([
+            'role' => 'required|in:Admin,Fasilitator,Member',
+        ]);
+
+        $user->update([
+            'role' => $validated['role']
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'Role pengguna ' . $user->nama_lengkap . ' berhasil diperbarui.');
     }
 }
