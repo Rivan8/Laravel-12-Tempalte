@@ -5,24 +5,17 @@
 
     RewriteEngine On
     
-    # Arahkan request asset statis ke folder `public/`
-    # Contoh: /assets/css/bootstrap.min.css -> /public/assets/css/bootstrap.min.css
-    RewriteRule ^(assets|css|js|images|fonts|storage|build)/(.*)$ public/$1/$2 [L,NC]
-
-    # Handle Authorization Header
+    # Forward Authorization header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    # Arahkan SEMUA traffic pengunjung menembus masuk ke folder public/
+    # (Bukan hanya asset statis, tapi semua routing website)
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
     
+    # Konfigurasi Pilihan Versi PHP Server cPanel / Litespeed
     <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
-    SetHandler application/x-lsphp82
+        SetHandler application/x-lsphp82
+    </FilesMatch>
 </IfModule>
