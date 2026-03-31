@@ -51,7 +51,7 @@
                                         <p class="text-xs text-secondary mb-0">{{ $req->nama_kelas }}</p>
                                     </td>
                                     <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">{{ \Carbon\Carbon::parse($req->request_date)->format('d M Y') }}</span>
+                                        <span class="text-secondary text-xs font-weight-bold">{{ \Carbon\Carbon::parse(trim($req->request_date, "'"))->format('d M Y') }}</span>
                                     </td>
                                     <td class="align-middle">
                                         <form action="{{ route('users.approve', ['user_id' => $req->user_id, 'kelas_id' => $req->kelas_id]) }}" method="POST">
@@ -225,7 +225,7 @@
                                         </div>
                                     </td>
                                     <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">{{ $user->created_at->format('d M Y') }}</span>
+                                        <span class="text-secondary text-xs font-weight-bold">{{ $user->created_at ? \Carbon\Carbon::parse(trim($user->created_at, "'"))->format('d M Y') : '-' }}</span>
                                     </td>
                                     <td class="align-middle text-center">
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0 d-flex align-items-center justify-content-center mx-auto" style="max-width: fit-content;">
