@@ -4,10 +4,6 @@
     </IfModule>
 
     RewriteEngine On
-    
-    # Arahkan request asset statis ke folder `public/`
-    # Contoh: /assets/css/bootstrap.min.css -> /public/assets/css/bootstrap.min.css
-    RewriteRule ^(assets|css|js|images|fonts|storage|build)/(.*)$ public/$1/$2 [L,NC]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -18,11 +14,12 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-    
-    <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
-    SetHandler application/x-lsphp82
+    # Redirect Everything to the /public Folder
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
+
+# Handle PHP Version for Rumahweb (LiteSpeed)
+<FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
+    SetHandler application/x-lsphp82
+</FilesMatch>
