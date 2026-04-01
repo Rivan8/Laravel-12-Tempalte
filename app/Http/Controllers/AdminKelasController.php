@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminKelasController extends Controller
 {
@@ -30,12 +31,17 @@ class AdminKelasController extends Controller
             'kategori'           => 'required|string|max:255',
             'deskripsi'          => 'required|string',
             'prasyarat_kelas_id' => 'nullable|exists:kelas,id',
-            'gambar'             => 'nullable|string',
-            'link_quiz'          => 'nullable|url'
+            'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'link_quiz'          => 'nullable|url',
         ]);
 
-        if (empty($validated['gambar'])) {
-            $validated['gambar'] = 'img/curved-images/curved1.jpg'; // default cover
+        // Handle upload gambar
+        if ($request->hasFile('gambar')) {
+            $path = $request->file('gambar')->store('kelas', 'public');
+            $validated['gambar'] = 'storage/' . $path;
+        } else {
+            // Default cover jika tidak ada upload
+            $validated['gambar'] = 'img/curved-images/curved1.jpg';
         }
 
         Kelas::create($validated);
@@ -62,9 +68,23 @@ class AdminKelasController extends Controller
             'kategori'           => 'required|string|max:255',
             'deskripsi'          => 'required|string',
             'prasyarat_kelas_id' => 'nullable|exists:kelas,id',
-            'gambar'             => 'nullable|string',
-            'link_quiz'          => 'nullable|url'
+            'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'link_quiz'          => 'nullable|url',
         ]);
+
+        // Handle upload gambar baru
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika bukan default
+            if ($kelas->gambar && str_starts_with($kelas->gambar, 'storage/')) {
+                $oldPath = str_replace('storage/', '', $kelas->gambar);
+                Storage::disk('public')->delete($oldPath);
+            }
+            $path = $request->file('gambar')->store('kelas', 'public');
+            $validated['gambar'] = 'storage/' . $path;
+        } else {
+            // Pertahankan gambar lama
+            unset($validated['gambar']);
+        }
 
         $kelas->update($validated);
 
@@ -75,6 +95,13 @@ class AdminKelasController extends Controller
     {
         if(auth()->user()->role !== 'Admin') abort(403);
         $kelas = Kelas::findOrFail($id);
+
+        // Hapus gambar dari storage jika bukan default
+        if ($kelas->gambar && str_starts_with($kelas->gambar, 'storage/')) {
+            $oldPath = str_replace('storage/', '', $kelas->gambar);
+            Storage::disk('public')->delete($oldPath);
+        }
+
         $kelas->delete();
         return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil dihapus.');
     }
