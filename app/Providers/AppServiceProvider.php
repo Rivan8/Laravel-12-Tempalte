@@ -23,13 +23,27 @@ class AppServiceProvider extends ServiceProvider
     {
         // Share jumlah request kelas PENDING ke seluruh views (untuk badge notifikasi sidebar)
         \Illuminate\Support\Facades\View::composer('*', function ($view) {
-            if (auth()->check() && auth()->user()->role === 'Admin') {
-                $pendingRequestCount = \Illuminate\Support\Facades\DB::table('kelas_users')
-                    ->where('status', 'requested')
-                    ->count();
-                $view->with('pendingRequestCount', $pendingRequestCount);
+            if (auth()->check()) {
+                $user = auth()->user();
+                if ($user->role === 'Admin') {
+                    // Untuk Admin: total REQUEST dari semua user yang menunggu konfirmasi
+                    $pendingRequestCount = \Illuminate\Support\Facades\DB::table('kelas_users')
+                        ->where('status', 'requested')
+                        ->count();
+                    $view->with('pendingRequestCount', $pendingRequestCount);
+                    $view->with('myPendingKelasCount', 0);
+                } else {
+                    // Untuk User biasa: jumlah kelas MEREKA SENDIRI yang menunggu konfirmasi
+                    $myPendingKelasCount = \Illuminate\Support\Facades\DB::table('kelas_users')
+                        ->where('user_id', $user->id)
+                        ->where('status', 'requested')
+                        ->count();
+                    $view->with('pendingRequestCount', 0);
+                    $view->with('myPendingKelasCount', $myPendingKelasCount);
+                }
             } else {
                 $view->with('pendingRequestCount', 0);
+                $view->with('myPendingKelasCount', 0);
             }
         });
 

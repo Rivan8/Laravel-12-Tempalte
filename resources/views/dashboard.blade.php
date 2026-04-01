@@ -3,6 +3,92 @@
 @section('title', 'Dashboard')
 
 @section('content')
+@php
+    $pendingKelas = $myClasses->where('pivot.status', 'requested');
+@endphp
+
+{{-- Toast Notifikasi Request Kelas Pending (untuk user biasa) --}}
+@if(auth()->user()->role !== 'Admin' && $pendingKelas->count() > 0)
+<div style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; max-width: 340px;" id="pendingRequestToast">
+    <div style="
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        overflow: hidden;
+        animation: slideInToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        border: 1px solid rgba(0,0,0,0.06);
+    ">
+        <div style="
+            background: linear-gradient(310deg, #f7931e 0%, #f05f2e 100%);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        ">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="
+                    width: 28px; height: 28px; border-radius: 8px;
+                    background: rgba(255,255,255,0.25);
+                    display: flex; align-items: center; justify-content: center;
+                ">
+                    <i class="fas fa-bell" style="color: #fff; font-size: 0.8rem;"></i>
+                </div>
+                <span style="color: #fff; font-weight: 700; font-size: 0.85rem;">Menunggu Konfirmasi</span>
+            </div>
+            <button onclick="document.getElementById('pendingRequestToast').remove()" style="
+                background: none; border: none; color: rgba(255,255,255,0.8);
+                cursor: pointer; padding: 4px; line-height: 1;
+                font-size: 1rem;
+            ">&times;</button>
+        </div>
+        <div style="padding: 14px 16px;">
+            <p style="font-size: 0.78rem; color: #6c757d; margin-bottom: 10px;">
+                <strong style="color: #344767;">{{ $pendingKelas->count() }} kelas</strong> yang Anda daftarkan sedang menunggu persetujuan admin.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                @foreach($pendingKelas->take(3) as $pk)
+                <div style="
+                    display: flex; align-items: center; gap: 8px;
+                    padding: 6px 10px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
+                    border-left: 3px solid #f7931e;
+                ">
+                    <i class="fas fa-graduation-cap" style="color: #f7931e; font-size: 0.7rem;"></i>
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #344767;">{{ $pk->nama_kelas }}</span>
+                </div>
+                @endforeach
+                @if($pendingKelas->count() > 3)
+                <p style="font-size: 0.72rem; color: #adb5bd; margin: 2px 0 0; text-align: center;">
+                    +{{ $pendingKelas->count() - 3 }} kelas lainnya...
+                </p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes slideInToast {
+    0%   { opacity: 0; transform: translateY(30px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+</style>
+
+<script>
+// Auto-dismiss toast setelah 7 detik
+setTimeout(function() {
+    var toast = document.getElementById('pendingRequestToast');
+    if (toast) {
+        toast.style.transition = 'all 0.4s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(function() { toast.remove(); }, 400);
+    }
+}, 7000);
+</script>
+@endif
+
 <div class="container-fluid py-4">
     <!-- Hero / Welcome -->
     <div class="row mb-4">
