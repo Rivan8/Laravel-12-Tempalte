@@ -24,11 +24,10 @@ class UserController extends Controller
         $usersQuery = \App\Models\User::with('kelas')->orderBy('created_at', 'desc');
 
         if ($search) {
-            $usersQuery->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('nama_lengkap', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%");
+            $usersQuery->where(function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('no_hp', 'like', "%{$search}%");
             });
         }
 
