@@ -21,6 +21,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Share jumlah request kelas PENDING ke seluruh views (untuk badge notifikasi sidebar)
+        \Illuminate\Support\Facades\View::composer('*', function ($view) {
+            if (auth()->check() && auth()->user()->role === 'Admin') {
+                $pendingRequestCount = \Illuminate\Support\Facades\DB::table('kelas_users')
+                    ->where('status', 'requested')
+                    ->count();
+                $view->with('pendingRequestCount', $pendingRequestCount);
+            } else {
+                $view->with('pendingRequestCount', 0);
+            }
+        });
+
         ResetPassword::toMailUsing(function (object $notifiable, string $token) {
             $url = url(route('password.reset', [
                 'token' => $token,

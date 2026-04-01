@@ -13,9 +13,31 @@
                 </div>
             @endif
 
-            <div class="card mb-4">
-                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                    <h6>Daftar Pengajuan Kelas Tertunda</h6>
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid rgba(0,0,0,.05);">
+                    <div class="d-flex align-items-center gap-3">
+                        <h6 class="mb-0"><i class="fas fa-inbox me-2 text-primary"></i>Daftar Pengajuan Kelas Tertunda</h6>
+                        @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
+                        <span style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-width: 24px;
+                            height: 24px;
+                            padding: 0 7px;
+                            background: linear-gradient(310deg, #f5365c 0%, #f56036 100%);
+                            color: #fff;
+                            font-size: 0.75rem;
+                            font-weight: 700;
+                            border-radius: 50px;
+                            box-shadow: 0 3px 10px rgba(245,54,92,0.4);
+                            animation: badge-pulse 2s infinite;
+                        ">{{ $pendingRequestCount }}</span>
+                        @endif
+                    </div>
+                    @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
+                    <span class="text-xs text-secondary">Ada <strong class="text-danger">{{ $pendingRequestCount }}</strong> request menunggu konfirmasi</span>
+                    @endif
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -31,24 +53,27 @@
                             </thead>
                             <tbody>
                                 @forelse($requests as $req)
-                                <tr>
+                                <tr class="border-bottom kelas-request-row request-status-new">
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div>
-                                                <div class="avatar avatar-sm me-3 bg-gradient-info text-white text-uppercase">
+                                                <div class="avatar avatar-sm me-3 bg-gradient-info text-white text-uppercase" style="font-size: 0.8rem; font-weight: 700;">
                                                     {{ substr($req->nama_lengkap, 0, 2) }}
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">{{ $req->nama_lengkap }}</h6>
+                                                <h6 class="mb-0 text-sm font-weight-bold">{{ $req->nama_lengkap }}</h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <p class="text-xs font-weight-bold mb-0">{{ $req->email }}</p>
                                     </td>
-                                    <td>
-                                        <p class="text-xs text-secondary mb-0">{{ $req->nama_kelas }}</p>
+                                    <td class="py-3">
+                                        <span class="kelas-request-badge">
+                                            <i class="fas fa-graduation-cap" style="font-size: 0.65rem;"></i>
+                                            {{ $req->nama_kelas }}
+                                        </span>
                                     </td>
                                     <td class="align-middle text-center text-sm">
                                         <span class="text-secondary text-xs font-weight-bold">{{ \Carbon\Carbon::parse(trim($req->request_date, "'"))->format('d M Y') }}</span>
@@ -57,7 +82,7 @@
                                         <form action="{{ route('users.approve', ['user_id' => $req->user_id, 'kelas_id' => $req->kelas_id]) }}" method="POST">
                                             @csrf
                                             <button type="submit" class="btn btn-sm bg-gradient-success mb-0" data-toggle="tooltip" data-original-title="Approve request">
-                                                Konfirmasi
+                                                <i class="fas fa-check me-1"></i>Konfirmasi
                                             </button>
                                         </form>
                                     </td>

@@ -33,7 +33,7 @@
         </li>
         @if(auth()->check() && auth()->user()->role === 'Admin')
         <li class="nav-item">
-          <a class="nav-link  {{ request()->is('users') ? 'active' : '' }}" href="{{ route('users.index') }}">
+          <a class="nav-link  {{ request()->is('users') ? 'active' : '' }}" href="{{ route('users.index') }}" style="position: relative;">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -50,6 +50,9 @@
               </svg>
             </div>
             <span class="nav-link-text ms-1">Users</span>
+            @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
+            <span class="sidebar-badge-count" title="{{ $pendingRequestCount }} request kelas pending">{{ $pendingRequestCount > 9 ? '9+' : $pendingRequestCount }}</span>
+            @endif
           </a>
         </li>
         @endif
@@ -90,11 +93,14 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Administrator CMS</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.kelas.*', 'admin.materi.*') ? 'active' : '' }}" href="{{ route('admin.kelas.index') }}">
+          <a class="nav-link {{ request()->routeIs('admin.kelas.*', 'admin.materi.*') ? 'active' : '' }}" href="{{ route('admin.kelas.index') }}" style="position: relative;">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fas fa-chalkboard-teacher {{ request()->routeIs('admin.kelas.*', 'admin.materi.*') ? 'text-white' : 'text-dark' }}"></i>
             </div>
             <span class="nav-link-text ms-1">Kelola Materi (LMS)</span>
+            @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
+            <span class="sidebar-badge-count" title="{{ $pendingRequestCount }} request kelas pending">{{ $pendingRequestCount > 9 ? '9+' : $pendingRequestCount }}</span>
+            @endif
           </a>
         </li>
         @endif
