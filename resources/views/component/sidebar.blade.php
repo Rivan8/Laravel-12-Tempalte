@@ -57,7 +57,7 @@
         </li>
         @endif
         <li class="nav-item">
-          <a class="nav-link  {{ request()->is('kelas') ? 'active' : '' }}" href="{{ route('kelas.index') }}">
+          <a class="nav-link  {{ request()->is('kelas') ? 'active' : '' }}" href="{{ route('kelas.index') }}" style="position: relative;">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
@@ -74,6 +74,10 @@
               </svg>
             </div>
             <span class="nav-link-text ms-1">Kelas</span>
+            {{-- Badge untuk user biasa: jumlah request MEREKA sendiri yang pending --}}
+            @if(auth()->check() && auth()->user()->role !== 'Admin' && isset($myPendingKelasCount) && $myPendingKelasCount > 0)
+            <span class="sidebar-badge-count" style="background: linear-gradient(310deg, #f7931e 0%, #f05f2e 100%); box-shadow: 0 2px 8px rgba(247,147,30,0.55);" title="{{ $myPendingKelasCount }} kelas menunggu konfirmasi">{{ $myPendingKelasCount }}</span>
+            @endif
           </a>
         </li>
         <li class="nav-item mt-3">
