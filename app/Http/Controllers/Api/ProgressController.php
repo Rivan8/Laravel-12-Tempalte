@@ -10,7 +10,7 @@ class ProgressController extends Controller
 {
     public function markComplete(Request $request, $materi_id)
     {
-        $user = auth()->user();
+        $user = $request->user(); // Works with both session & Sanctum token
         
         if (!$user) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
