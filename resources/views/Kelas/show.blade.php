@@ -45,7 +45,7 @@
             <div class="col-lg-4">
                 <div class="card shadow-sm sticky-top" style="top: 20px;">
                     <div class="card-body p-4 text-center">
-                        <h5 class="mb-3">Mulai Perjalanan Anda!!!!ß</h5>
+                        <h5 class="mb-3">Mulai Perjalanan Anda Sekarang Juga</h5>
                         <p class="text-sm text-secondary mb-4">Daftarkan diri Anda pada kelas ini untuk mengakses seluruh
                             materi video dan bahan ajarnya.</p>
 
