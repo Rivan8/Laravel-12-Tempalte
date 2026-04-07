@@ -13,6 +13,9 @@ class Kelas extends Model
         'gambar',
         'prasyarat_kelas_id',
         'link_quiz',
+        'handbook',
+        'tools',
+        'slide',
     ];
 
     public function prasyarat()

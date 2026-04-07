@@ -160,12 +160,70 @@
                         </div>
 
                         {{-- ── LINK KUIS ── --}}
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label class="form-label text-sm font-weight-bold">Link Google Form Kuis (Ujian Akhir)</label>
                             <input type="url" name="link_quiz" class="form-control"
                                 value="{{ $kelas->link_quiz }}"
                                 placeholder="https://forms.gle/xxxxxx">
                             <small class="text-secondary mt-1 d-block text-xs">Biarkan kosong jika tidak ada kuis ujian akhir.</small>
+                        </div>
+
+                        {{-- ── MATERI PENDUKUNG ── --}}
+                        <div class="mb-4 bg-gray-100 p-3 border-radius-lg">
+                            <label class="form-label text-sm font-weight-bold text-dark">
+                                <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung (Optional)
+                            </label>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-xs font-weight-bold">Handbook (PDF/Doc)</label>
+                                    @if($kelas->handbook)
+                                    <div class="mb-2 d-flex align-items-center justify-content-between">
+                                        <a href="{{ asset($kelas->handbook) }}" target="_blank" class="text-xs text-info font-weight-bold">
+                                            <i class="fas fa-file-pdf me-1"></i>Lihat Handbook
+                                        </a>
+                                        <div class="form-check mb-0 border-0 p-0">
+                                            <label class="text-xs text-danger font-weight-bold mb-0 cursor-pointer">
+                                                <input type="checkbox" name="delete_handbook" value="1" class="form-check-input me-1"> Hapus
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <input type="file" name="handbook" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-xs font-weight-bold">Tools (ZIP/PDF)</label>
+                                    @if($kelas->tools)
+                                    <div class="mb-2 d-flex align-items-center justify-content-between">
+                                        <a href="{{ asset($kelas->tools) }}" target="_blank" class="text-xs text-info font-weight-bold">
+                                            <i class="fas fa-file-archive me-1"></i>Lihat Tools
+                                        </a>
+                                        <div class="form-check mb-0 border-0 p-0">
+                                            <label class="text-xs text-danger font-weight-bold mb-0 cursor-pointer">
+                                                <input type="checkbox" name="delete_tools" value="1" class="form-check-input me-1"> Hapus
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <input type="file" name="tools" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-xs font-weight-bold">Slide Materi (PPT/PDF)</label>
+                                    @if($kelas->slide)
+                                    <div class="mb-2 d-flex align-items-center justify-content-between">
+                                        <a href="{{ asset($kelas->slide) }}" target="_blank" class="text-xs text-info font-weight-bold">
+                                            <i class="fas fa-file-powerpoint me-1"></i>Lihat Slide
+                                        </a>
+                                        <div class="form-check mb-0 border-0 p-0">
+                                            <label class="text-xs text-danger font-weight-bold mb-0 cursor-pointer">
+                                                <input type="checkbox" name="delete_slide" value="1" class="form-check-input me-1"> Hapus
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <input type="file" name="slide" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <small class="text-secondary d-block text-xs">Abaikan jika tidak ingin mengganti file. Maks 10MB per file.</small>
                         </div>
 
                         {{-- ── PRASYARAT ── --}}

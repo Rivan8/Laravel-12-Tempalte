@@ -31,18 +31,29 @@ class AdminKelasController extends Controller
             'kategori'           => 'required|string|max:255',
             'deskripsi'          => 'required|string',
             'prasyarat_kelas_id' => 'nullable|exists:kelas,id',
-            'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'link_quiz'          => 'nullable|url',
-        ]);
+             'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+             'link_quiz'          => 'nullable|url',
+             'handbook'           => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'tools'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'slide'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+         ]);
+ 
+         // Handle upload gambar
+         if ($request->hasFile('gambar')) {
+             $path = $request->file('gambar')->store('kelas', 'public');
+             $validated['gambar'] = 'storage/' . $path;
+         } else {
+             // Default cover jika tidak ada upload
+             $validated['gambar'] = 'img/curved-images/curved1.jpg';
+         }
 
-        // Handle upload gambar
-        if ($request->hasFile('gambar')) {
-            $path = $request->file('gambar')->store('kelas', 'public');
-            $validated['gambar'] = 'storage/' . $path;
-        } else {
-            // Default cover jika tidak ada upload
-            $validated['gambar'] = 'img/curved-images/curved1.jpg';
-        }
+         // Handle upload file pendukung
+         foreach (['handbook', 'tools', 'slide'] as $fileField) {
+             if ($request->hasFile($fileField)) {
+                 $path = $request->file($fileField)->store('materi_pendukung', 'public');
+                 $validated[$fileField] = 'storage/' . $path;
+             }
+         }
 
         Kelas::create($validated);
 
@@ -68,23 +79,48 @@ class AdminKelasController extends Controller
             'kategori'           => 'required|string|max:255',
             'deskripsi'          => 'required|string',
             'prasyarat_kelas_id' => 'nullable|exists:kelas,id',
-            'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'link_quiz'          => 'nullable|url',
-        ]);
+             'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+             'link_quiz'          => 'nullable|url',
+             'handbook'           => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'tools'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'slide'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+         ]);
+ 
+         // Handle upload gambar baru
+         if ($request->hasFile('gambar')) {
+             // Hapus gambar lama jika bukan default
+             if ($kelas->gambar && str_starts_with($kelas->gambar, 'storage/')) {
+                 $oldPath = str_replace('storage/', '', $kelas->gambar);
+                 Storage::disk('public')->delete($oldPath);
+             }
+             $path = $request->file('gambar')->store('kelas', 'public');
+             $validated['gambar'] = 'storage/' . $path;
+         } else {
+             // Pertahankan gambar lama
+             unset($validated['gambar']);
+         }
 
-        // Handle upload gambar baru
-        if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika bukan default
-            if ($kelas->gambar && str_starts_with($kelas->gambar, 'storage/')) {
-                $oldPath = str_replace('storage/', '', $kelas->gambar);
-                Storage::disk('public')->delete($oldPath);
-            }
-            $path = $request->file('gambar')->store('kelas', 'public');
-            $validated['gambar'] = 'storage/' . $path;
-        } else {
-            // Pertahankan gambar lama
-            unset($validated['gambar']);
-        }
+         // Handle upload atau hapus file pendukung baru
+         foreach (['handbook', 'tools', 'slide'] as $fileField) {
+             if ($request->hasFile($fileField)) {
+                 // Hapus file lama jika ada
+                 if ($kelas->$fileField) {
+                     $oldPath = str_replace('storage/', '', $kelas->$fileField);
+                     Storage::disk('public')->delete($oldPath);
+                 }
+                 $path = $request->file($fileField)->store('materi_pendukung', 'public');
+                 $validated[$fileField] = 'storage/' . $path;
+             } elseif ($request->has("delete_{$fileField}")) {
+                 // Hapus file jika dicentang hapus
+                 if ($kelas->$fileField) {
+                     $oldPath = str_replace('storage/', '', $kelas->$fileField);
+                     Storage::disk('public')->delete($oldPath);
+                 }
+                 $validated[$fileField] = null;
+             } else {
+                 unset($validated[$fileField]);
+             }
+         }
 
         $kelas->update($validated);
 
@@ -96,11 +132,19 @@ class AdminKelasController extends Controller
         if(auth()->user()->role !== 'Admin') abort(403);
         $kelas = Kelas::findOrFail($id);
 
-        // Hapus gambar dari storage jika bukan default
-        if ($kelas->gambar && str_starts_with($kelas->gambar, 'storage/')) {
-            $oldPath = str_replace('storage/', '', $kelas->gambar);
-            Storage::disk('public')->delete($oldPath);
-        }
+         // Hapus gambar dari storage jika bukan default
+         if ($kelas->gambar && str_starts_with($kelas->gambar, 'storage/')) {
+             $oldPath = str_replace('storage/', '', $kelas->gambar);
+             Storage::disk('public')->delete($oldPath);
+         }
+ 
+         // Hapus file pendukung
+         foreach (['handbook', 'tools', 'slide'] as $fileField) {
+             if ($kelas->$fileField) {
+                 $oldPath = str_replace('storage/', '', $kelas->$fileField);
+                 Storage::disk('public')->delete($oldPath);
+             }
+         }
 
         $kelas->delete();
         return redirect()->route('admin.kelas.index')->with('success', 'Kelas berhasil dihapus.');

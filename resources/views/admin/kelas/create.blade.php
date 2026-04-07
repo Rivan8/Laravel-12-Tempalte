@@ -144,12 +144,34 @@
                         </div>
 
                         {{-- ── LINK KUIS ── --}}
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label class="form-label text-sm font-weight-bold">Link Google Form Kuis (Ujian Akhir)</label>
                             <input type="url" name="link_quiz" class="form-control"
                                 placeholder="https://forms.gle/xxxxxx"
                                 value="{{ old('link_quiz') }}">
                             <small class="text-secondary mt-1 d-block text-xs">Biarkan kosong jika tidak ada kuis ujian akhir.</small>
+                        </div>
+
+                        {{-- ── MATERI PENDUKUNG ── --}}
+                        <div class="mb-4 bg-gray-100 p-3 border-radius-lg">
+                            <label class="form-label text-sm font-weight-bold text-dark">
+                                <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung (Optional)
+                            </label>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-xs font-weight-bold">Handbook (PDF/Doc)</label>
+                                    <input type="file" name="handbook" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-xs font-weight-bold">Tools (ZIP/PDF)</label>
+                                    <input type="file" name="tools" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-xs font-weight-bold">Slide Materi (PPT/PDF)</label>
+                                    <input type="file" name="slide" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <small class="text-secondary d-block text-xs">Format: PDF, DOC, PPT, ZIP (Maks 10MB per file)</small>
                         </div>
 
                         {{-- ── PRASYARAT ── --}}
