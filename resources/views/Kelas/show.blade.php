@@ -84,13 +84,11 @@
             </div>
 
             {{-- ── MATERI PENDUKUNG (DOWNLOAD) ── --}}
-            @if($kelas->handbook || $kelas->tools || $kelas->slide)
             <div class="card shadow-sm mt-4">
                 <div class="card-body p-4">
                     <h6 class="mb-3">
                         <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung
                     </h6>
-                    <p class="text-xs text-secondary mb-3">Unduh materi tambahan untuk menunjang pembelajaran Anda.</p>
                     
                     @if($kelas->handbook)
                     <a href="{{ asset($kelas->handbook) }}" class="btn btn-outline-primary btn-sm w-100 mb-2" download>
@@ -109,9 +107,14 @@
                         <i class="fas fa-file-powerpoint me-2"></i> Download Slide
                     </a>
                     @endif
+
+                    @if(!$kelas->handbook && !$kelas->tools && !$kelas->slide)
+                    <p class="text-xs text-secondary mb-0 mt-2">
+                        <i class="fas fa-info-circle me-1"></i> Data file masih kosong di database.
+                    </p>
+                    @endif
                 </div>
             </div>
-            @endif
         </div>
     </div>
 </div>
