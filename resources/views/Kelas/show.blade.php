@@ -75,44 +75,38 @@
                             <i class="fas fa-play me-2"></i> Lanjutkan Belajar
                         </a>
                     @endif
+                    
+                    {{-- ── MATERI PENDUKUNG (PINDAH KE DALAM KARTU) ── --}}
+                    @if($kelas->handbook || $kelas->tools || $kelas->slide)
+                    <div class="mt-4 pt-3 border-top text-start">
+                        <h6 class="text-sm font-weight-bold mb-3">
+                            <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung
+                        </h6>
+                        
+                        @if($kelas->handbook)
+                        <a href="{{ asset($kelas->handbook) }}" class="btn btn-outline-primary btn-sm w-100 mb-2" download>
+                            <i class="fas fa-file-pdf me-2"></i> Download Handbook
+                        </a>
+                        @endif
+                        
+                        @if($kelas->tools)
+                        <a href="{{ asset($kelas->tools) }}" class="btn btn-outline-primary btn-sm w-100 mb-2" download>
+                            <i class="fas fa-tools me-2"></i> Download Tools
+                        </a>
+                        @endif
+                        
+                        @if($kelas->slide)
+                        <a href="{{ asset($kelas->slide) }}" class="btn btn-outline-primary btn-sm w-100 mb-0" download>
+                            <i class="fas fa-file-powerpoint me-2"></i> Download Slide
+                        </a>
+                        @endif
+                    </div>
+                    @endif
                 </div>
                 <div class="card-footer bg-transparent border-top text-center pt-3 pb-3">
                     <a href="{{ route('kelas.index') }}" class="text-sm text-primary font-weight-bold">
                         <i class="fas fa-arrow-left me-1"></i> Kembali ke Katalog
                     </a>
-                </div>
-            </div>
-
-            {{-- ── MATERI PENDUKUNG (DOWNLOAD) ── --}}
-            <div class="card shadow-sm mt-4">
-                <div class="card-body p-4">
-                    <h6 class="mb-3">
-                        <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung
-                    </h6>
-                    
-                    @if($kelas->handbook)
-                    <a href="{{ asset($kelas->handbook) }}" class="btn btn-outline-primary btn-sm w-100 mb-2" download>
-                        <i class="fas fa-file-pdf me-2"></i> Download Handbook
-                    </a>
-                    @endif
-                    
-                    @if($kelas->tools)
-                    <a href="{{ asset($kelas->tools) }}" class="btn btn-outline-primary btn-sm w-100 mb-2" download>
-                        <i class="fas fa-tools me-2"></i> Download Tools
-                    </a>
-                    @endif
-                    
-                    @if($kelas->slide)
-                    <a href="{{ asset($kelas->slide) }}" class="btn btn-outline-primary btn-sm w-100 mb-0" download>
-                        <i class="fas fa-file-powerpoint me-2"></i> Download Slide
-                    </a>
-                    @endif
-
-                    @if(!$kelas->handbook && !$kelas->tools && !$kelas->slide)
-                    <p class="text-xs text-secondary mb-0 mt-2">
-                        <i class="fas fa-info-circle me-1"></i> Data file masih kosong di database.
-                    </p>
-                    @endif
                 </div>
             </div>
         </div>
