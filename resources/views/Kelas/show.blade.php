@@ -83,11 +83,7 @@
                             </a>
                         @endif
 
-                        {{-- DEBUG DATABASE --}}
-                        <div class="text-xs text-secondary mt-3 border-top pt-2">
-                            Debug: H[{{ $kelas->handbook ? 'OK' : 'NULL' }}] T[{{ $kelas->tools ? 'OK' : 'NULL' }}]
-                            S[{{ $kelas->slide ? 'OK' : 'NULL' }}]
-                        </div>
+
 
                         {{-- ── MATERI PENDUKUNG (PINDAH KE DALAM KARTU) ── --}}
                         @if($kelas->handbook || $kelas->tools || $kelas->slide)
