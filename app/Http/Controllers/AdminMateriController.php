@@ -39,6 +39,7 @@ class AdminMateriController extends Controller
             'judul'     => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'video_url' => 'required|url',
+            'pembicara' => 'nullable|string|max:255',
             'urutan'    => 'required|integer|min:1'
         ]);
         
@@ -73,6 +74,7 @@ class AdminMateriController extends Controller
             'judul'     => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'video_url' => 'required|url',
+            'pembicara' => 'nullable|string|max:255',
             'urutan'    => 'required|integer|min:1'
         ]);
         

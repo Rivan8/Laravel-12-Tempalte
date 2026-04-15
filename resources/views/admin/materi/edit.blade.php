@@ -32,6 +32,12 @@
                             <small class="text-xs text-secondary mt-2 d-block">Sistem akan otomatis menerjemahkan link YouTube biasa menjadi tayangan Embed (*Iframe*) yang siap dimainkan di Ruang Belajar.</small>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label text-sm font-weight-bold"><i class="fas fa-user-tie text-primary me-2"></i>Nama Pengajar</label>
+                            <input type="text" name="pembicara" class="form-control" placeholder="Contoh: Ps. John Doe" value="{{ $materi->pembicara }}">
+                            <small class="text-xs text-secondary mt-1 d-block">Nama pengajar/narasumber yang tampil di video sesi ini. (Opsional)</small>
+                        </div>
+
                         <div class="mb-4">
                             <label class="form-label text-sm font-weight-bold">Deskripsi Ringkasan Topik / Arahan</label>
                             <textarea name="deskripsi" class="form-control" rows="5" placeholder="Tuliskan tujuan pembelajaran dari sesi tayangan video ini...">{{ $materi->deskripsi }}</textarea>

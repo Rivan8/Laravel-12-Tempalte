@@ -31,6 +31,15 @@
                     </div>
                     
                     <h5>{{ $activeMateri ? $activeMateri->judul : 'Sesi Belum Dijadwalkan' }}</h5>
+                    @if($activeMateri && $activeMateri->pembicara)
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="icon icon-shape icon-xs bg-gradient-primary shadow text-center border-radius-sm d-flex align-items-center justify-content-center me-2">
+                            <i class="fas fa-user-tie text-white" style="font-size: 0.6rem;"></i>
+                        </div>
+                        <span class="text-sm font-weight-bold text-dark">{{ $activeMateri->pembicara }}</span>
+                        <span class="badge bg-gradient-light text-dark ms-2 border-radius-sm" style="font-size: 0.65rem;">Pengajar</span>
+                    </div>
+                    @endif
                     <p class="text-sm text-secondary">
                         {{ $activeMateri ? $activeMateri->deskripsi : 'Deksripsi dan penjabaran sesi kurikulum belum tersedia untuk saat ini.' }}
                     </p>

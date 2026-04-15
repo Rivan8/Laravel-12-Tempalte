@@ -47,6 +47,9 @@
                                     <td>
                                         <h6 class="mb-1 text-dark font-weight-bold">{{ $m->judul }}</h6>
                                         <p class="text-xs text-secondary mb-0 w-75">{{ Str::limit($m->deskripsi, 80) }}</p>
+                                        @if($m->pembicara)
+                                        <span class="text-xs text-primary font-weight-bold"><i class="fas fa-user-tie me-1"></i>{{ $m->pembicara }}</span>
+                                        @endif
                                     </td>
                                     <td class="align-middle text-center">
                                         <a href="{{ $m->video_url }}" target="_blank" class="text-sm text-info text-decoration-underline" data-bs-toggle="tooltip" title="Uji Coba Tonton">
