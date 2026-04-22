@@ -42,7 +42,10 @@ class KelasController extends Controller
         }
 
         // Jika lolos semua validasi
-        $user->kelas()->attach($id, ['status' => 'requested']);
+        $activeBatch = $kelas->batches()->where('is_active', true)->orderBy('created_at', 'desc')->first();
+        $batchId = $activeBatch ? $activeBatch->id : null;
+
+        $user->kelas()->attach($id, ['status' => 'requested', 'batch_id' => $batchId]);
         
         return back()->with('success', 'Berhasil melakukan request untuk kelas ' . $kelas->nama_kelas);
     }
@@ -55,7 +58,22 @@ class KelasController extends Controller
         $enrollment = $user ? $user->kelas()->wherePivot('kelas_id', $id)->first() : null;
         $status = $enrollment ? $enrollment->pivot->status : null;
         
-        return view('kelas.show', compact('kelas', 'status'));
+        $belumBuka = false;
+        $tanggalBuka = null;
+        
+        $batch = null;
+        if ($enrollment && $enrollment->pivot->batch_id) {
+            $batch = \App\Models\Batch::find($enrollment->pivot->batch_id);
+        } else {
+            $batch = $kelas->batches()->where('is_active', true)->orderBy('created_at', 'desc')->first();
+        }
+
+        if ($batch && $batch->start_date && $batch->start_date > today()) {
+            $belumBuka = true;
+            $tanggalBuka = \Carbon\Carbon::parse($batch->start_date)->translatedFormat('d F Y');
+        }
+        
+        return view('kelas.show', compact('kelas', 'status', 'belumBuka', 'tanggalBuka'));
     }
 
     public function belajar($id, $materi_id = null)
@@ -70,6 +88,15 @@ class KelasController extends Controller
         
         if (!$enrollment || ($enrollment->pivot->status !== 'in_progress' && $enrollment->pivot->status !== 'completed')) {
             return redirect()->route('dashboard')->with('error', 'Anda belum memiliki akses untuk mempelajari kelas ini.');
+        }
+
+        // Pengecekan Tanggal Buka Batch
+        if ($enrollment->pivot->batch_id) {
+            $batch = \App\Models\Batch::find($enrollment->pivot->batch_id);
+            if ($batch && $batch->start_date && $batch->start_date > now()) {
+                $formattedDate = \Carbon\Carbon::parse($batch->start_date)->translatedFormat('d F Y');
+                return redirect()->route('kelas.show', $id)->with('error', 'Kelas belum di buka, akan tersedia di tanggal ' . $formattedDate);
+            }
         }
 
         $materiList = $kelas->materi;

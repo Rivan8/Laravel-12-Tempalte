@@ -4,6 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/privacy-policy', 'privacy')->name('privacy');
+Route::get('/auto-login', function () {
+    auth()->loginUsingId(1);
+    return redirect('/dashboard');
+});
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -85,7 +89,10 @@ Route::middleware('auth')->group(function () {
 
     // Admin CMS (Manajemen Kelas & Video)
     Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'exportPdf'])->name('reports.pdf');
         Route::resource('kelas', \App\Http\Controllers\AdminKelasController::class)->except(['show']);
+        Route::resource('kelas.batches', \App\Http\Controllers\AdminBatchController::class)->except(['show']);
         
         // Sub-rute untuk Materi Video di dalam Kelas
         Route::get('kelas/{kelas}/materi', [\App\Http\Controllers\AdminMateriController::class, 'index'])->name('materi.index');

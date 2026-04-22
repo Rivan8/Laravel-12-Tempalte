@@ -11,6 +11,17 @@ class KelasUser extends Model
     protected $fillable = [
         'user_id',
         'kelas_id',
+        'batch_id',
         'status',
     ];
+
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

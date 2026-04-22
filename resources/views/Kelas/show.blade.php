@@ -61,15 +61,21 @@
                             </div>
                         @endif
 
+                        @if(isset($belumBuka) && $belumBuka)
+                            <div class="alert alert-warning text-white text-sm font-weight-bold" role="alert">
+                                <i class="fas fa-calendar-alt me-2"></i> Kelas belum dibuka. Akan tersedia pada <strong>{{ $tanggalBuka }}</strong>.
+                            </div>
+                        @endif
+
                         @if(!$status)
                             <form action="{{ route('kelas.request', $kelas->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn bg-gradient-primary btn-lg w-100 mb-0 shadow-lg">
-                                    <i class="fas fa-paper-plane me-2"></i> Request Kelas Ini
+                                <button type="submit" class="btn bg-gradient-primary btn-lg w-100 mb-0 shadow-lg {{ isset($belumBuka) && $belumBuka ? 'disabled' : '' }}" {{ isset($belumBuka) && $belumBuka ? 'disabled' : '' }}>
+                                    <i class="fas fa-paper-plane me-2"></i> {{ isset($belumBuka) && $belumBuka ? 'Pendaftaran Belum Buka' : 'Request Kelas Ini' }}
                                 </button>
                             </form>
                         @elseif($status === 'requested')
-                            <div class="alert alert-warning text-white font-weight-bold" role="alert">
+                            <div class="alert alert-info text-white font-weight-bold" role="alert">
                                 <i class="fas fa-clock me-2"></i> Menunggu Persetujuan Admin
                             </div>
                             <button class="btn btn-outline-secondary w-100 disabled mb-0">Request Terkirim</button>
@@ -77,10 +83,17 @@
                             <div class="alert alert-success text-white font-weight-bold" role="alert">
                                 <i class="fas fa-check-circle me-2"></i> Anda Sudah Terdaftar
                             </div>
-                            <a href="{{ route('kelas.belajar', $kelas->id) }}"
-                                class="btn bg-gradient-info btn-lg w-100 mb-0 shadow">
-                                <i class="fas fa-play me-2"></i> Lanjutkan Belajar
-                            </a>
+                            
+                            @if(isset($belumBuka) && $belumBuka)
+                                <button class="btn bg-gradient-secondary btn-lg w-100 mb-0 shadow disabled">
+                                    <i class="fas fa-lock me-2"></i> Belum Bisa Diakses
+                                </button>
+                            @else
+                                <a href="{{ route('kelas.belajar', $kelas->id) }}"
+                                    class="btn bg-gradient-info btn-lg w-100 mb-0 shadow">
+                                    <i class="fas fa-play me-2"></i> Lanjutkan Belajar
+                                </a>
+                            @endif
                         @endif
 
 

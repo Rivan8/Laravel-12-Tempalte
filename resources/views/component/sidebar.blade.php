@@ -134,7 +134,17 @@
                 class="fas fa-chalkboard-teacher {{ request()->routeIs('admin.kelas.*', 'admin.materi.*') ? 'text-white' : 'text-dark' }}"></i>
             </div>
             <span class="nav-link-text ms-1">Kelola Materi</span>
-            @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.reports.index') ? 'active' : '' }}" href="{{ route('admin.reports.index') }}">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fas fa-chart-bar {{ request()->routeIs('admin.reports.index') ? 'text-white' : 'text-dark' }}"></i>
+            </div>
+            <span class="nav-link-text ms-1">Laporan Progress</span>
+          </a>
+        </li>
+        @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
               <span class="sidebar-badge-count"
                 title="{{ $pendingRequestCount }} request kelas pending">{{ $pendingRequestCount > 9 ? '9+' : $pendingRequestCount }}</span>
             @endif

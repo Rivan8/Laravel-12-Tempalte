@@ -51,6 +51,26 @@ class UserController extends Controller
         return back()->with('success', 'Request kelas berhasil disetujui.');
     }
 
+    public function reject(Request $request, $user_id, $kelas_id)
+    {
+        if (auth()->user()->role !== 'Admin') abort(403);
+
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000'
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('kelas_users')
+            ->where('user_id', $user_id)
+            ->where('kelas_id', $kelas_id)
+            ->update([
+                'status' => 'rejected',
+                'rejection_reason' => $request->rejection_reason,
+                'updated_at' => now()
+            ]);
+
+        return back()->with('success', 'Request kelas berhasil ditolak.');
+    }
+
     public function edit(\App\Models\User $user)
     {
         if (auth()->user()->role !== 'Admin') abort(403);
@@ -71,5 +91,20 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('users.index')->with('success', 'Role pengguna ' . $user->nama_lengkap . ' berhasil diperbarui.');
+    }
+
+    public function destroy(\App\Models\User $user)
+    {
+        if (auth()->user()->role !== 'Admin') abort(403);
+
+        // Hapus data relasi jika perlu, tapi biasanya sudah ada cascade di DB
+        // Namun untuk amannya kita hapus manual relasinya
+        \Illuminate\Support\Facades\DB::table('kelas_users')->where('user_id', $user->id)->delete();
+        \Illuminate\Support\Facades\DB::table('materi_users')->where('user_id', $user->id)->delete();
+
+        $nama = $user->nama_lengkap ?? $user->name;
+        $user->delete();
+
+        return back()->with('success', 'Pengguna ' . $nama . ' berhasil dihapus.');
     }
 }
