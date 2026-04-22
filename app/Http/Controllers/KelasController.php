@@ -20,8 +20,40 @@ class KelasController extends Controller
         $kelas = \App\Models\Kelas::findOrFail($id);
         $user = auth()->user();
 
-        // Pastikan belum request/completed
-        if ($user->kelas()->where('kelas_id', $id)->exists()) {
+        // Cek apakah sudah punya relasi dengan kelas ini
+        $existingEnrollment = $user->kelas()->where('kelas_id', $id)->first();
+        
+        if ($existingEnrollment) {
+            // Jika ditolak, izinkan untuk mengajukan ulang
+            if ($existingEnrollment->pivot->status === 'rejected') {
+                // Verifikasi Prasyarat Dinamis via Database
+                if ($kelas->prasyarat_kelas_id) {
+                    if ($user->role !== 'Fasilitator' && $user->role !== 'Admin') {
+                        $prasyarat = \App\Models\Kelas::find($kelas->prasyarat_kelas_id);
+                        $hasCompletedPrasyarat = $user->kelas()
+                            ->where('kelas_id', $kelas->prasyarat_kelas_id)
+                            ->where('kelas_users.status', 'completed')
+                            ->exists();
+
+                        if (!$hasCompletedPrasyarat) {
+                            $namaPrasyarat = $prasyarat ? $prasyarat->nama_kelas : 'Prasyarat sebelumnya';
+                            return back()->with('error', 'Anda harus menyelesaikan kelas ' . $namaPrasyarat . ' terlebih dahulu untuk dapat mendaftar kelas ini.');
+                        }
+                    }
+                }
+
+                $activeBatch = $kelas->batches()->where('is_active', true)->orderBy('created_at', 'desc')->first();
+                $batchId = $activeBatch ? $activeBatch->id : null;
+
+                $user->kelas()->updateExistingPivot($id, [
+                    'status' => 'requested',
+                    'rejection_reason' => null,
+                    'batch_id' => $batchId,
+                ]);
+                
+                return back()->with('success', 'Pengajuan ulang untuk kelas ' . $kelas->nama_kelas . ' berhasil dikirim.');
+            }
+            
             return back()->with('error', 'Anda sudah mengakses atau mendaftar kelas ini.');
         }
 
@@ -57,6 +89,7 @@ class KelasController extends Controller
         
         $enrollment = $user ? $user->kelas()->wherePivot('kelas_id', $id)->first() : null;
         $status = $enrollment ? $enrollment->pivot->status : null;
+        $rejectionReason = $enrollment ? $enrollment->pivot->rejection_reason : null;
         
         $belumBuka = false;
         $tanggalBuka = null;
@@ -73,7 +106,7 @@ class KelasController extends Controller
             $tanggalBuka = \Carbon\Carbon::parse($batch->start_date)->translatedFormat('d F Y');
         }
         
-        return view('kelas.show', compact('kelas', 'status', 'belumBuka', 'tanggalBuka'));
+        return view('kelas.show', compact('kelas', 'status', 'rejectionReason', 'belumBuka', 'tanggalBuka'));
     }
 
     public function belajar($id, $materi_id = null)

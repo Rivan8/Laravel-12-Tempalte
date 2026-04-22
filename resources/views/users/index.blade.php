@@ -79,12 +79,17 @@
                                         <span class="text-secondary text-xs font-weight-bold">{{ \Carbon\Carbon::parse(trim($req->request_date, "'"))->format('d M Y') }}</span>
                                     </td>
                                     <td class="align-middle">
-                                        <form action="{{ route('users.approve', ['user_id' => $req->user_id, 'kelas_id' => $req->kelas_id]) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm bg-gradient-success mb-0" data-toggle="tooltip" data-original-title="Approve request">
-                                                <i class="fas fa-check me-1"></i>Konfirmasi
+                                        <div class="d-flex gap-2">
+                                            <form action="{{ route('users.approve', ['user_id' => $req->user_id, 'kelas_id' => $req->kelas_id]) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm bg-gradient-success mb-0" data-toggle="tooltip" data-original-title="Approve request">
+                                                    <i class="fas fa-check me-1"></i>Konfirmasi
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-sm bg-gradient-danger mb-0" data-bs-toggle="modal" data-bs-target="#rejectModal-{{ $req->user_id }}-{{ $req->kelas_id }}">
+                                                <i class="fas fa-times me-1"></i>Tolak
                                             </button>
-                                        </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -204,46 +209,6 @@
                                             <button type="button" class="btn btn-sm btn-link text-primary p-0 m-0 text-start mt-2" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $user->id }}">
                                                 Lihat Rincian <i class="fas fa-arrow-right text-xs ms-1"></i>
                                             </button>
-                                            
-                                            <!-- Modal Rincian Kelas -->
-                                            <div class="modal fade" id="progressModal-{{ $user->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $user->id }}" aria-hidden="true">
-                                              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalLabel-{{ $user->id }}">
-                                                        <i class="fas fa-book-open text-primary me-2"></i>Histori Pembelajaran
-                                                    </h5>
-                                                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                  </div>
-                                                  <div class="modal-body p-0">
-                                                    <ul class="list-group list-group-flush">
-                                                        @foreach($user->kelas->sortBy('pivot.status') as $k)
-                                                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                                                                <div>
-                                                                    <h6 class="mb-0 text-sm font-weight-bold">{{ $k->nama_kelas }}</h6>
-                                                                    <p class="text-xs text-secondary mb-0">{{ $k->kategori }}</p>
-                                                                </div>
-                                                                <div>
-                                                                    @if($k->pivot->status === 'completed')
-                                                                        <span class="badge bg-gradient-success">Selesai</span>
-                                                                    @elseif($k->pivot->status === 'in_progress')
-                                                                        <span class="badge bg-gradient-warning">Sedang Aktif</span>
-                                                                    @else
-                                                                        <span class="badge border border-secondary text-secondary bg-transparent">Menunggu</span>
-                                                                    @endif
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Tutup</button>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
                                             @else
                                                 <span class="text-xs text-muted font-italic mt-2">Belum ada data kelas</span>
                                             @endif
@@ -253,9 +218,16 @@
                                         <span class="text-secondary text-xs font-weight-bold">{{ $user->created_at ? \Carbon\Carbon::parse(trim($user->created_at, "'"))->format('d M Y') : '-' }}</span>
                                     </td>
                                     <td class="align-middle text-center">
-                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0 d-flex align-items-center justify-content-center mx-auto" style="max-width: fit-content;">
-                                            <i class="fas fa-user-edit me-1"></i> Edit Role
-                                        </a>
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-info mb-0" data-toggle="tooltip" title="Edit Role">
+                                                <i class="fas fa-user-edit me-1"></i> Edit
+                                            </a>
+                                            @if(auth()->user()->id !== $user->id)
+                                            <button type="button" class="btn btn-sm btn-outline-danger mb-0" data-bs-toggle="modal" data-bs-target="#deleteUserModal-{{ $user->id }}" data-toggle="tooltip" title="Hapus Pengguna">
+                                                <i class="fas fa-trash-alt me-1"></i> Hapus
+                                            </button>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -280,4 +252,142 @@
         </div>
     </div>
 </div>
+
+{{-- ============================================== --}}
+{{-- SEMUA MODAL DI LUAR TABLE (agar tidak terpotong) --}}
+{{-- ============================================== --}}
+
+{{-- Modal Tolak Request --}}
+@foreach($requests as $req)
+<div class="modal fade" id="rejectModal-{{ $req->user_id }}-{{ $req->kelas_id }}" tabindex="-1" aria-labelledby="rejectModalLabel-{{ $req->user_id }}-{{ $req->kelas_id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="{{ route('users.reject', ['user_id' => $req->user_id, 'kelas_id' => $req->kelas_id]) }}" method="POST">
+                @csrf
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title" id="rejectModalLabel-{{ $req->user_id }}-{{ $req->kelas_id }}">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Tolak Pengajuan Kelas
+                    </h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-light text-dark text-sm mb-3" role="alert">
+                        <i class="fas fa-info-circle text-primary me-1"></i>
+                        Anda akan menolak pengajuan <strong>{{ $req->nama_lengkap }}</strong> untuk kelas <strong>{{ $req->nama_kelas }}</strong>.
+                    </div>
+                    <div class="mb-3">
+                        <label for="rejection_reason-{{ $req->user_id }}-{{ $req->kelas_id }}" class="form-control-label font-weight-bold">
+                            Alasan Penolakan <span class="text-danger">*</span>
+                        </label>
+                        <textarea 
+                            name="rejection_reason" 
+                            id="rejection_reason-{{ $req->user_id }}-{{ $req->kelas_id }}" 
+                            class="form-control" 
+                            rows="4" 
+                            placeholder="Tulis alasan penolakan, contoh: Belum menyelesaikan kelas prasyarat, kuota kelas sudah penuh, dll."
+                            required
+                        ></textarea>
+                        <small class="text-xs text-secondary mt-1 d-block">Alasan ini akan tercatat di sistem untuk referensi.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light mb-0" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn bg-gradient-danger mb-0">
+                        <i class="fas fa-ban me-1"></i>Konfirmasi Tolak
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
+{{-- Modal Rincian Kelas & Modal Hapus User --}}
+@foreach($users as $user)
+    {{-- Modal Rincian Kelas --}}
+    @if($user->kelas->count() > 0)
+    <div class="modal fade" id="progressModal-{{ $user->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $user->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel-{{ $user->id }}">
+                        <i class="fas fa-book-open text-primary me-2"></i>Histori Pembelajaran — {{ $user->nama_lengkap ?? $user->name }}
+                    </h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @foreach($user->kelas->sortBy('pivot.status') as $k)
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <h6 class="mb-0 text-sm font-weight-bold">{{ $k->nama_kelas }}</h6>
+                                    <p class="text-xs text-secondary mb-0">{{ $k->kategori }}</p>
+                                </div>
+                                <div>
+                                    @if($k->pivot->status === 'completed')
+                                        <span class="badge bg-gradient-success">Selesai</span>
+                                    @elseif($k->pivot->status === 'in_progress')
+                                        <span class="badge bg-gradient-warning">Sedang Aktif</span>
+                                    @else
+                                        <span class="badge border border-secondary text-secondary bg-transparent">Menunggu</span>
+                                    @endif
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- Modal Konfirmasi Hapus User --}}
+    @if(auth()->user()->id !== $user->id)
+    <div class="modal fade" id="deleteUserModal-{{ $user->id }}" tabindex="-1" aria-labelledby="deleteUserModalLabel-{{ $user->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title" id="deleteUserModalLabel-{{ $user->id }}">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Konfirmasi Hapus Pengguna
+                    </h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <div class="avatar avatar-lg bg-gradient-danger text-white mx-auto mb-3" style="font-size: 1.5rem; font-weight: 700;">
+                            {{ substr($user->nama_lengkap ?? $user->name, 0, 2) }}
+                        </div>
+                        <h6 class="mb-1">{{ $user->nama_lengkap ?? $user->name }}</h6>
+                        <p class="text-sm text-secondary mb-0">{{ $user->email }}</p>
+                    </div>
+                    <div class="alert alert-danger text-white text-sm" role="alert">
+                        <i class="fas fa-exclamation-circle me-1"></i>
+                        <strong>Perhatian!</strong> Tindakan ini akan menghapus pengguna beserta seluruh data kelas dan progres belajarnya secara permanen. Tindakan ini tidak dapat dibatalkan.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light mb-0" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn bg-gradient-danger mb-0">
+                            <i class="fas fa-trash-alt me-1"></i>Ya, Hapus Pengguna
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+@endforeach
+
 @endsection

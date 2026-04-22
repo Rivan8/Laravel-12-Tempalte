@@ -79,6 +79,30 @@
                                 <i class="fas fa-clock me-2"></i> Menunggu Persetujuan Admin
                             </div>
                             <button class="btn btn-outline-secondary w-100 disabled mb-0">Request Terkirim</button>
+                        @elseif($status === 'rejected')
+                            <div class="alert text-sm mb-3" role="alert" style="background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%); border: none;">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-times-circle text-white me-2" style="font-size: 1.2rem;"></i>
+                                    <strong class="text-white">Pengajuan Ditolak</strong>
+                                </div>
+                                <p class="text-white mb-0 opacity-8" style="font-size: 0.8rem;">Pengajuan Anda untuk kelas ini telah ditolak oleh Admin.</p>
+                            </div>
+                            @if(isset($rejectionReason) && $rejectionReason)
+                            <div class="card border mb-3" style="border-color: #ea0606 !important; border-left: 4px solid #ea0606 !important;">
+                                <div class="card-body py-3 px-3">
+                                    <p class="text-xs text-uppercase font-weight-bold text-danger mb-1">
+                                        <i class="fas fa-comment-alt me-1"></i> Alasan Penolakan
+                                    </p>
+                                    <p class="text-sm text-dark mb-0">{{ $rejectionReason }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            <form action="{{ route('kelas.request', $kelas->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn bg-gradient-primary btn-lg w-100 mb-0 shadow-lg">
+                                    <i class="fas fa-redo me-2"></i> Ajukan Ulang
+                                </button>
+                            </form>
                         @elseif($status === 'in_progress' || $status === 'completed')
                             <div class="alert alert-success text-white font-weight-bold" role="alert">
                                 <i class="fas fa-check-circle me-2"></i> Anda Sudah Terdaftar

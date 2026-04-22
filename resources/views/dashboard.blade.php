@@ -5,6 +5,7 @@
 @section('content')
 @php
     $pendingKelas = $myClasses->where('pivot.status', 'requested');
+    $rejectedKelas = $myClasses->where('pivot.status', 'rejected');
 @endphp
 
 {{-- Toast Notifikasi Request Kelas Pending (untuk user biasa) --}}
@@ -86,6 +87,89 @@ setTimeout(function() {
         setTimeout(function() { toast.remove(); }, 400);
     }
 }, 7000);
+</script>
+@endif
+
+{{-- Toast Notifikasi Kelas Ditolak (untuk user biasa) --}}
+@if(auth()->user()->role !== 'Admin' && $rejectedKelas->count() > 0)
+<div style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; max-width: 380px;" id="rejectedRequestToast">
+    <div style="
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+        overflow: hidden;
+        animation: slideInToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        border: 1px solid rgba(234,6,6,0.15);
+    ">
+        <div style="
+            background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        ">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="
+                    width: 28px; height: 28px; border-radius: 8px;
+                    background: rgba(255,255,255,0.25);
+                    display: flex; align-items: center; justify-content: center;
+                ">
+                    <i class="fas fa-times-circle" style="color: #fff; font-size: 0.8rem;"></i>
+                </div>
+                <span style="color: #fff; font-weight: 700; font-size: 0.85rem;">Pengajuan Ditolak</span>
+            </div>
+            <button onclick="document.getElementById('rejectedRequestToast').remove()" style="
+                background: none; border: none; color: rgba(255,255,255,0.8);
+                cursor: pointer; padding: 4px; line-height: 1;
+                font-size: 1rem;
+            ">&times;</button>
+        </div>
+        <div style="padding: 14px 16px;">
+            <p style="font-size: 0.78rem; color: #6c757d; margin-bottom: 10px;">
+                <strong style="color: #ea0606;">{{ $rejectedKelas->count() }} pengajuan kelas</strong> Anda telah ditolak oleh admin.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                @foreach($rejectedKelas->take(3) as $rk)
+                <div style="
+                    padding: 8px 12px;
+                    background: #fff5f5;
+                    border-radius: 8px;
+                    border-left: 3px solid #ea0606;
+                ">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                        <i class="fas fa-graduation-cap" style="color: #ea0606; font-size: 0.7rem;"></i>
+                        <span style="font-size: 0.78rem; font-weight: 600; color: #344767;">{{ $rk->nama_kelas }}</span>
+                    </div>
+                    @if($rk->pivot->rejection_reason)
+                    <p style="font-size: 0.72rem; color: #8392ab; margin: 0; padding-left: 18px;">"{{ Str::limit($rk->pivot->rejection_reason, 80) }}"</p>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+            @if($rejectedKelas->count() > 3)
+            <p style="font-size: 0.72rem; color: #adb5bd; margin: 6px 0 0; text-align: center;">
+                +{{ $rejectedKelas->count() - 3 }} kelas lainnya...
+            </p>
+            @endif
+            <a href="{{ route('kelas.index') }}" style="
+                display: block; text-align: center; margin-top: 10px;
+                font-size: 0.78rem; font-weight: 600; color: #5e72e4;
+                text-decoration: none;
+            ">Lihat Detail & Ajukan Ulang →</a>
+        </div>
+    </div>
+</div>
+
+<script>
+setTimeout(function() {
+    var toast = document.getElementById('rejectedRequestToast');
+    if (toast) {
+        toast.style.transition = 'all 0.4s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(function() { toast.remove(); }, 400);
+    }
+}, 10000);
 </script>
 @endif
 
@@ -251,6 +335,18 @@ setTimeout(function() {
                                                     <button type="button" class="btn btn-outline-success btn-sm mb-0 w-100 disabled">Selesai</button>
                                                 @elseif($kelas->pivot->status === 'in_progress')
                                                     <a href="{{ route('kelas.belajar', $kelas->id) }}" class="btn bg-gradient-primary btn-sm mb-0 w-100">Lanjutkan</a>
+                                                @elseif($kelas->pivot->status === 'rejected')
+                                                    <div class="w-100">
+                                                        <div class="alert alert-danger text-white text-xs py-2 px-3 mb-2" role="alert">
+                                                            <i class="fas fa-times-circle me-1"></i> Ditolak
+                                                            @if($kelas->pivot->rejection_reason)
+                                                                <br><small class="opacity-8">"{{ Str::limit($kelas->pivot->rejection_reason, 60) }}"</small>
+                                                            @endif
+                                                        </div>
+                                                        <a href="{{ route('kelas.show', $kelas->id) }}" class="btn bg-gradient-primary btn-sm mb-0 w-100">
+                                                            <i class="fas fa-redo me-1"></i> Lihat Detail
+                                                        </a>
+                                                    </div>
                                                 @else
                                                     <button type="button" class="btn btn-outline-warning btn-sm mb-0 w-100 disabled">Menunggu Admin</button>
                                                 @endif

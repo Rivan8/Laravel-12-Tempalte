@@ -86,6 +86,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{user}/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::post('/users/{user_id}/approve/{kelas_id}', [\App\Http\Controllers\UserController::class, 'approve'])->name('users.approve');
+    Route::post('/users/{user_id}/reject/{kelas_id}', [\App\Http\Controllers\UserController::class, 'reject'])->name('users.reject');
+    Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
 
     // Admin CMS (Manajemen Kelas & Video)
     Route::prefix('admin')->name('admin.')->group(function () {

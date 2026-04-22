@@ -31,7 +31,7 @@ class User extends Authenticatable
     public function kelas()
     {
         return $this->belongsToMany(Kelas::class, 'kelas_users')
-            ->withPivot('status')
+            ->withPivot('status', 'rejection_reason')
             ->withTimestamps();
     }
 
