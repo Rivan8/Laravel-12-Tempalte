@@ -177,7 +177,7 @@
                                             <span class="badge badge-sm {{ $dmStatus === 'Disciple Maker (DM)' ? 'bg-gradient-success' : ($dmStatus === 'Core Team' ? 'bg-gradient-info' : 'bg-gradient-light text-secondary') }} w-auto d-inline-block" style="max-width: fit-content;">
                                                 <i class="fas fa-crown me-1 text-xxs"></i> {{ $dmStatus }}
                                             </span>
-                                            <span class="badge badge-sm bg-gradient-primary w-auto d-inline-block" style="max-width: fit-content;">
+                                            <span class="badge badge-sm bg-gradient-{{ $user->equip_status_color }} w-auto d-inline-block" style="max-width: fit-content;">
                                                 <i class="fas fa-layer-group me-1 text-xxs"></i> Equip: {{ $eqStatus }}
                                             </span>
                                         </div>

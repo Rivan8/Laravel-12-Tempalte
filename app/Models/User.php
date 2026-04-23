@@ -103,15 +103,32 @@ class User extends Authenticatable
         
         $hasGrade1 = $this->hasCompletedClass($lulusan, ['grade 1', 'g1']);
         $hasMarried = $this->hasCompletedClass($lulusan, ['married', 'marriage', 'family & marriage']);
+        
         if ($hasGrade1 && $hasMarried) {
             return 'Grow';
         }
         
-        if ($this->hasCompletedClass($lulusan, ['foundation class 2', 'fc2', 'foundation 2'])) {
+        if ($this->hasCompletedClass($lulusan, ['foundation class 2', 'fc2', 'foundation 2', 'foundation class 3', 'fc3', 'foundation 3'])) {
             return 'Plant';
         }
         
         return 'New';
+    }
+
+    /**
+     * Get color class for Equip Status
+     */
+    public function getEquipStatusColorAttribute()
+    {
+        $status = $this->equip_status;
+        
+        return match($status) {
+            'Volunteer' => 'success',
+            'Grow'      => 'info',
+            'Plant'     => 'warning',
+            'New'       => 'secondary',
+            default     => 'secondary',
+        };
     }
 
     /**
