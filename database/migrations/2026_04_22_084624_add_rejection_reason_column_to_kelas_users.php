@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('kelas_users', function (Blueprint $table) {
-            $table->text('rejection_reason')->nullable()->after('status');
-        });
+        if (!Schema::hasColumn('kelas_users', 'rejection_reason')) {
+            Schema::table('kelas_users', function (Blueprint $table) {
+                $table->text('rejection_reason')->nullable()->after('status');
+            });
+        }
     }
 
     /**
