@@ -171,59 +171,52 @@
                         {{-- ── MATERI PENDUKUNG ── --}}
                         <div class="mb-4 bg-gray-100 p-3 border-radius-lg">
                             <label class="form-label text-sm font-weight-bold text-dark">
-                                <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung (Optional)
+                                <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung (Optional, hingga 12 file)
                             </label>
+                            <small class="text-secondary d-block text-xs mb-3">Abaikan jika tidak ingin mengganti file. Maks 10MB per file. Anda dapat memberikan penamaan khusus untuk tombol download masing-masing file.</small>
                             <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label text-xs font-weight-bold">Handbook (PDF/Doc)</label>
-                                    @if($kelas->handbook)
-                                    <div class="mb-2 d-flex align-items-center justify-content-between">
-                                        <a href="{{ asset($kelas->handbook) }}" target="_blank" class="text-xs text-info font-weight-bold">
-                                            <i class="fas fa-file-pdf me-1"></i>Lihat Handbook
-                                        </a>
-                                        <div class="form-check mb-0 border-0 p-0">
-                                            <label class="text-xs text-danger font-weight-bold mb-0 cursor-pointer">
-                                                <input type="checkbox" name="delete_handbook" value="1" class="form-check-input me-1"> Hapus
-                                            </label>
+                                @php
+                                    $materiFields = [
+                                        ['name' => 'handbook', 'label' => 'File 1'],
+                                        ['name' => 'tools', 'label' => 'File 2'],
+                                        ['name' => 'slide', 'label' => 'File 3'],
+                                    ];
+                                    for ($i = 4; $i <= 12; $i++) {
+                                        $materiFields[] = ['name' => 'file_' . $i, 'label' => 'File ' . $i];
+                                    }
+                                @endphp
+
+                                @foreach($materiFields as $field)
+                                    @php
+                                        $fieldName = $field['name'];
+                                        $customNameField = $fieldName . '_name';
+                                    @endphp
+                                    <div class="col-md-4 mb-3">
+                                        <div class="border border-radius-md p-2 bg-white h-100">
+                                            <span class="badge bg-gradient-info mb-2 text-xxs mb-1">{{ $field['label'] }}</span>
+
+                                            <label class="form-label text-xs font-weight-bold mb-0 mt-1">Nama Tombol Download</label>
+                                            <input type="text" name="{{ $customNameField }}" class="form-control form-control-sm mb-2" placeholder="Nama Tombol (Contoh: Download {{ explode(' ', $field['label'])[0] }})" value="{{ old($customNameField, $kelas->$customNameField) }}">
+
+                                            <label class="form-label text-xs font-weight-bold mb-0">Upload File Baru</label>
+                                            @if($kelas->$fieldName)
+                                            <div class="mb-2 d-flex align-items-center justify-content-between p-1 bg-light rounded text-xs mt-1">
+                                                <a href="{{ asset($kelas->$fieldName) }}" target="_blank" class="text-info font-weight-bold text-truncate" style="max-width: 60%; font-size: 0.75rem;">
+                                                    <i class="fas fa-file-alt me-1"></i> Lihat File
+                                                </a>
+                                                <div class="form-check mb-0 border-0 p-0 text-end d-flex align-items-center">
+                                                    <input type="checkbox" name="delete_{{ $fieldName }}" id="delete_{{ $fieldName }}" value="1" class="form-check-input m-0 float-none me-1" style="transform: scale(0.85);">
+                                                    <label for="delete_{{ $fieldName }}" class="text-danger font-weight-bold mb-0 cursor-pointer" style="font-size: 0.75rem; margin-top: 2px;">
+                                                        Hapus
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            <input type="file" name="{{ $fieldName }}" class="form-control form-control-sm mt-1">
                                         </div>
                                     </div>
-                                    @endif
-                                    <input type="file" name="handbook" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label text-xs font-weight-bold">Tools (ZIP/PDF)</label>
-                                    @if($kelas->tools)
-                                    <div class="mb-2 d-flex align-items-center justify-content-between">
-                                        <a href="{{ asset($kelas->tools) }}" target="_blank" class="text-xs text-info font-weight-bold">
-                                            <i class="fas fa-file-archive me-1"></i>Lihat Tools
-                                        </a>
-                                        <div class="form-check mb-0 border-0 p-0">
-                                            <label class="text-xs text-danger font-weight-bold mb-0 cursor-pointer">
-                                                <input type="checkbox" name="delete_tools" value="1" class="form-check-input me-1"> Hapus
-                                            </label>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    <input type="file" name="tools" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label text-xs font-weight-bold">Slide Materi (PPT/PDF)</label>
-                                    @if($kelas->slide)
-                                    <div class="mb-2 d-flex align-items-center justify-content-between">
-                                        <a href="{{ asset($kelas->slide) }}" target="_blank" class="text-xs text-info font-weight-bold">
-                                            <i class="fas fa-file-powerpoint me-1"></i>Lihat Slide
-                                        </a>
-                                        <div class="form-check mb-0 border-0 p-0">
-                                            <label class="text-xs text-danger font-weight-bold mb-0 cursor-pointer">
-                                                <input type="checkbox" name="delete_slide" value="1" class="form-check-input me-1"> Hapus
-                                            </label>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    <input type="file" name="slide" class="form-control form-control-sm">
-                                </div>
+                                @endforeach
                             </div>
-                            <small class="text-secondary d-block text-xs">Abaikan jika tidak ingin mengganti file. Maks 10MB per file.</small>
                         </div>
 
                         {{-- ── PRASYARAT ── --}}

@@ -34,8 +34,29 @@ class AdminKelasController extends Controller
              'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
              'link_quiz'          => 'nullable|url',
              'handbook'           => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'handbook_name'      => 'nullable|string|max:255',
              'tools'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'tools_name'         => 'nullable|string|max:255',
              'slide'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'slide_name'         => 'nullable|string|max:255',
+             'file_4'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_4_name'        => 'nullable|string|max:255',
+             'file_5'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_5_name'        => 'nullable|string|max:255',
+             'file_6'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_6_name'        => 'nullable|string|max:255',
+             'file_7'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_7_name'        => 'nullable|string|max:255',
+             'file_8'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_8_name'        => 'nullable|string|max:255',
+             'file_9'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_9_name'        => 'nullable|string|max:255',
+             'file_10'            => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_10_name'       => 'nullable|string|max:255',
+             'file_11'            => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_11_name'       => 'nullable|string|max:255',
+             'file_12'            => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_12_name'       => 'nullable|string|max:255',
          ]);
  
          // Handle upload gambar
@@ -48,7 +69,8 @@ class AdminKelasController extends Controller
          }
 
          // Handle upload file pendukung
-         foreach (['handbook', 'tools', 'slide'] as $fileField) {
+         $fileFields = ['handbook', 'tools', 'slide', 'file_4', 'file_5', 'file_6', 'file_7', 'file_8', 'file_9', 'file_10', 'file_11', 'file_12'];
+         foreach ($fileFields as $fileField) {
              if ($request->hasFile($fileField)) {
                  $path = $request->file($fileField)->store('materi_pendukung', 'public');
                  $validated[$fileField] = 'storage/' . $path;
@@ -82,8 +104,29 @@ class AdminKelasController extends Controller
              'gambar'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
              'link_quiz'          => 'nullable|url',
              'handbook'           => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'handbook_name'      => 'nullable|string|max:255',
              'tools'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'tools_name'         => 'nullable|string|max:255',
              'slide'              => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'slide_name'         => 'nullable|string|max:255',
+             'file_4'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_4_name'        => 'nullable|string|max:255',
+             'file_5'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_5_name'        => 'nullable|string|max:255',
+             'file_6'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_6_name'        => 'nullable|string|max:255',
+             'file_7'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_7_name'        => 'nullable|string|max:255',
+             'file_8'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_8_name'        => 'nullable|string|max:255',
+             'file_9'             => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_9_name'        => 'nullable|string|max:255',
+             'file_10'            => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_10_name'       => 'nullable|string|max:255',
+             'file_11'            => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_11_name'       => 'nullable|string|max:255',
+             'file_12'            => 'nullable|file|mimes:pdf,docx,doc,pptx,ppt,zip,rar|max:10240',
+             'file_12_name'       => 'nullable|string|max:255',
          ]);
  
          // Handle upload gambar baru
@@ -101,7 +144,8 @@ class AdminKelasController extends Controller
          }
 
          // Handle upload atau hapus file pendukung baru
-         foreach (['handbook', 'tools', 'slide'] as $fileField) {
+         $fileFields = ['handbook', 'tools', 'slide', 'file_4', 'file_5', 'file_6', 'file_7', 'file_8', 'file_9', 'file_10', 'file_11', 'file_12'];
+         foreach ($fileFields as $fileField) {
              if ($request->hasFile($fileField)) {
                  // Hapus file lama jika ada
                  if ($kelas->$fileField) {
@@ -139,7 +183,8 @@ class AdminKelasController extends Controller
          }
  
          // Hapus file pendukung
-         foreach (['handbook', 'tools', 'slide'] as $fileField) {
+         $fileFields = ['handbook', 'tools', 'slide', 'file_4', 'file_5', 'file_6', 'file_7', 'file_8', 'file_9', 'file_10', 'file_11', 'file_12'];
+         foreach ($fileFields as $fileField) {
              if ($kelas->$fileField) {
                  $oldPath = str_replace('storage/', '', $kelas->$fileField);
                  Storage::disk('public')->delete($oldPath);

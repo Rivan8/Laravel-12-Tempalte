@@ -155,23 +155,35 @@
                         {{-- ── MATERI PENDUKUNG ── --}}
                         <div class="mb-4 bg-gray-100 p-3 border-radius-lg">
                             <label class="form-label text-sm font-weight-bold text-dark">
-                                <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung (Optional)
+                                <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung (Optional, hingga 12 file)
                             </label>
+                            <small class="text-secondary d-block text-xs mb-3">Format: PDF, DOC, PPT, ZIP, RAR (Maks 10MB per file). Anda dapat memberikan nama khusus untuk tombol download masing-masing file.</small>
                             <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label text-xs font-weight-bold">Handbook (PDF/Doc)</label>
-                                    <input type="file" name="handbook" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label text-xs font-weight-bold">Tools (ZIP/PDF)</label>
-                                    <input type="file" name="tools" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label text-xs font-weight-bold">Slide Materi (PPT/PDF)</label>
-                                    <input type="file" name="slide" class="form-control form-control-sm">
-                                </div>
+                                @php
+                                    $materiFields = [
+                                        ['name' => 'handbook', 'label' => 'File 1'],
+                                        ['name' => 'tools', 'label' => 'File 2'],
+                                        ['name' => 'slide', 'label' => 'File 3'],
+                                    ];
+                                    for ($i = 4; $i <= 12; $i++) {
+                                        $materiFields[] = ['name' => 'file_' . $i, 'label' => 'File ' . $i];
+                                    }
+                                @endphp
+
+                                @foreach($materiFields as $field)
+                                    <div class="col-md-4 mb-3">
+                                        <div class="border border-radius-md p-2 bg-white h-100">
+                                            <span class="badge bg-gradient-primary mb-2 text-xxs mb-1">{{ $field['label'] }}</span>
+                                            
+                                            <label class="form-label text-xs font-weight-bold mb-0 mt-1">Nama Tombol Download</label>
+                                            <input type="text" name="{{ $field['name'] }}_name" class="form-control form-control-sm mb-2" placeholder="Nama Tombol (Contoh: Download {{ explode(' ', $field['label'])[0] }})" value="{{ old($field['name'].'_name') }}">
+                                            
+                                            <label class="form-label text-xs font-weight-bold mb-0">Upload File</label>
+                                            <input type="file" name="{{ $field['name'] }}" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                            <small class="text-secondary d-block text-xs">Format: PDF, DOC, PPT, ZIP (Maks 10MB per file)</small>
                         </div>
 
                         {{-- ── PRASYARAT ── --}}

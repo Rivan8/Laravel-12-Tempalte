@@ -123,30 +123,35 @@
 
 
                         {{-- ── MATERI PENDUKUNG (PINDAH KE DALAM KARTU) ── --}}
-                        @if($kelas->handbook || $kelas->tools || $kelas->slide)
+                        @php
+                            $materiFields = ['handbook', 'tools', 'slide'];
+                            for($i=4; $i<=12; $i++) { $materiFields[] = 'file_'.$i; }
+                            
+                            $materiToDisplay = [];
+                            foreach($materiFields as $index => $mField) {
+                                if($kelas->$mField) {
+                                    $defaultName = 'Download File ' . ($index + 1);
+
+                                    $materiToDisplay[] = [
+                                        'url' => asset($kelas->$mField),
+                                        'name' => $kelas->{$mField.'_name'} ?: $defaultName,
+                                    ];
+                                }
+                            }
+                        @endphp
+
+                        @if(count($materiToDisplay) > 0)
                             <div class="mt-4 pt-3 border-top text-start">
                                 <h6 class="text-sm font-weight-bold mb-3">
                                     <i class="fas fa-file-download text-primary me-2"></i>Materi Pendukung
                                 </h6>
 
-                                @if($kelas->handbook)
-                                    <a href="{{ asset($kelas->handbook) }}" class="btn btn-outline-primary btn-sm w-100 mb-2"
+                                @foreach($materiToDisplay as $md)
+                                    <a href="{{ $md['url'] }}" class="btn btn-outline-primary btn-sm w-100 mb-2"
                                         download>
-                                        <i class="fas fa-file-pdf me-2"></i> Download Handbook
+                                        <i class="fas fa-download me-2"></i> {{ $md['name'] }}
                                     </a>
-                                @endif
-
-                                @if($kelas->tools)
-                                    <a href="{{ asset($kelas->tools) }}" class="btn btn-outline-primary btn-sm w-100 mb-2" download>
-                                        <i class="fas fa-tools me-2"></i> Download Tools
-                                    </a>
-                                @endif
-
-                                @if($kelas->slide)
-                                    <a href="{{ asset($kelas->slide) }}" class="btn btn-outline-primary btn-sm w-100 mb-0" download>
-                                        <i class="fas fa-file-powerpoint me-2"></i> Download Slide
-                                    </a>
-                                @endif
+                                @endforeach
                             </div>
                         @endif
                     </div>
