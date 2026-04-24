@@ -282,7 +282,7 @@
                                             @php
                                                 $statusConfig = [
                                                     'completed' => ['color' => 'success', 'icon' => 'check-circle', 'label' => 'Selesai'],
-                                                    'in_progress' => ['color' => 'info', 'icon' => 'spinner', 'label' => 'Berlangsung'],
+                                                    'in_progress' => ['color' => 'info', 'icon' => 'spinner', 'label' => 'On-Going'],
                                                     'requested' => ['color' => 'warning', 'icon' => 'clock', 'label' => 'Menunggu'],
                                                 ];
                                                 $sc = $statusConfig[$report['status']] ?? ['color' => 'secondary', 'icon' => 'question', 'label' => ucfirst($report['status'])];

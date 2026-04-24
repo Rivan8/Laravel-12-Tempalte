@@ -307,7 +307,7 @@
                     @php
                         $statusLabels = [
                             'completed' => 'Selesai',
-                            'in_progress' => 'Berlangsung',
+                            'in_progress' => 'Belum Selesai',
                             'requested' => 'Menunggu',
                         ];
                         $badgeClass = 'badge-' . str_replace('_', '-', $report['status']);
