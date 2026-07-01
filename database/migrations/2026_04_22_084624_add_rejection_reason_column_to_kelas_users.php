@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('kelas_users', 'rejection_reason')) {
-            Schema::table('kelas_users', function (Blueprint $table) {
-                $table->text('rejection_reason')->nullable()->after('status');
-            });
-        }
+        Schema::table('kelas_users', function (Blueprint $table) {
+            $table->text('rejection_reason')->nullable()->after('status');
+        });
     }
 
     /**
@@ -24,7 +22,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('kelas_users', function (Blueprint $table) {
-            $table->dropColumn('rejection_reason');
+            if (Schema::hasColumn('kelas_users', 'rejection_reason')) {
+                $table->dropColumn('rejection_reason');
+            }
         });
     }
 };
