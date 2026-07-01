@@ -130,8 +130,11 @@
                                     <option value="Equip - New"         {{ old('kategori') == 'Equip - New'         ? 'selected' : '' }}>Equip - New</option>
                                     <option value="Equip - Plant"        {{ old('kategori') == 'Equip - Plant'        ? 'selected' : '' }}>Equip - Plant</option>
                                     <option value="Equip - Grow"         {{ old('kategori') == 'Equip - Grow'         ? 'selected' : '' }}>Equip - Grow</option>
+                                    <option value="Worship"              {{ old('kategori') == 'Worship'              ? 'selected' : '' }}>Worship</option>
                                     <option value="Equip - Fruitful"     {{ old('kategori') == 'Equip - Fruitful'     ? 'selected' : '' }}>Equip - Fruitful</option>
+
                                     <option value="Leadership"           {{ old('kategori') == 'Leadership'           ? 'selected' : '' }}>Leadership</option>
+
                                 </select>
                             </div>
                         </div>
@@ -174,10 +177,10 @@
                                     <div class="col-md-4 mb-3">
                                         <div class="border border-radius-md p-2 bg-white h-100">
                                             <span class="badge bg-gradient-primary mb-2 text-xxs mb-1">{{ $field['label'] }}</span>
-                                            
+
                                             <label class="form-label text-xs font-weight-bold mb-0 mt-1">Nama Tombol Download</label>
                                             <input type="text" name="{{ $field['name'] }}_name" class="form-control form-control-sm mb-2" placeholder="Nama Tombol (Contoh: Download {{ explode(' ', $field['label'])[0] }})" value="{{ old($field['name'].'_name') }}">
-                                            
+
                                             <label class="form-label text-xs font-weight-bold mb-0">Upload File</label>
                                             <input type="file" name="{{ $field['name'] }}" class="form-control form-control-sm">
                                         </div>
