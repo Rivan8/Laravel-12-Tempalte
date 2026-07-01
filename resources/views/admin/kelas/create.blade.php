@@ -132,9 +132,7 @@
                                     <option value="Equip - Grow"         {{ old('kategori') == 'Equip - Grow'         ? 'selected' : '' }}>Equip - Grow</option>
                                     <option value="Worship"              {{ old('kategori') == 'Worship'              ? 'selected' : '' }}>Worship</option>
                                     <option value="Equip - Fruitful"     {{ old('kategori') == 'Equip - Fruitful'     ? 'selected' : '' }}>Equip - Fruitful</option>
-
                                     <option value="Leadership"           {{ old('kategori') == 'Leadership'           ? 'selected' : '' }}>Leadership</option>
-
                                 </select>
                             </div>
                         </div>
