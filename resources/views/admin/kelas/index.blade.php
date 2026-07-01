@@ -6,7 +6,7 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-            
+
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show text-white" role="alert">
                 <span class="alert-icon"><i class="fas fa-check"></i></span>
@@ -31,8 +31,8 @@
                                 <tr>
                                     <th class="text-uppercase font-weight-bolder opacity-7 px-4">Nama Kelas & Kategori</th>
                                     <th class="text-uppercase font-weight-bolder opacity-7 ps-2">Prasyarat Wajib</th>
-                                    <th class="text-center text-uppercase font-weight-bolder opacity-7">Total Video</th>
-                                    <th class="text-center text-uppercase font-weight-bolder opacity-7">Aksi</th>
+                                    <th class="text-center text-uppercase font-weight-bolder opacity-7">Total Video & Materi</th>
+                                    <th class="text-center text-uppercase font-weight-bolder opacity-7">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
