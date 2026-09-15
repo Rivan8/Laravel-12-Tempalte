@@ -47,6 +47,11 @@ class Kelas extends Model
         return $this->hasMany(Materi::class);
     }
 
+    public function sesis()
+    {
+        return $this->hasMany(Sesi::class)->orderBy('urutan');
+    }
+
     public function batches()
     {
         return $this->hasMany(Batch::class);

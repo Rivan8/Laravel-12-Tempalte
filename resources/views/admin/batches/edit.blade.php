@@ -18,6 +18,24 @@
                             <input type="date" name="start_date" value="{{ $batch->start_date ? $batch->start_date->format('Y-m-d') : '' }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                         </div>
 
+                        @if($sesis->count() > 1)
+                            @php $sessionDates = $batch->sessionSchedules->keyBy('sesi_id'); @endphp
+                            <div class="mb-4 p-3 bg-light border-radius-md">
+                                <label class="form-label"><i class="fas fa-calendar-alt text-primary me-1"></i>Jadwal Pelaksanaan Tiap Sesi</label>
+                                <small class="text-secondary d-block mb-3">Atur tanggal pelaksanaan sesi untuk batch ini.</small>
+                                <div class="row">
+                                    @foreach($sesis as $sesi)
+                                        @php $schedule = $sessionDates->get($sesi->id); @endphp
+                                        <div class="col-md-6 mb-3">
+                                            <label for="tanggal_sesi_{{ $sesi->id }}" class="form-label text-sm">Sesi {{ $sesi->urutan }} - {{ $sesi->judul }}</label>
+                                            <input type="date" name="tanggal_sesi[{{ $sesi->id }}]" id="tanggal_sesi_{{ $sesi->id }}" value="{{ old('tanggal_sesi.' . $sesi->id, $schedule?->tanggal_pelaksanaan?->format('Y-m-d')) }}" class="form-control @error('tanggal_sesi.' . $sesi->id) is-invalid @enderror" required>
+                                            @error('tanggal_sesi.' . $sesi->id)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="mb-4 form-check form-switch">
                             <input class="form-check-input" type="checkbox" name="is_active" id="isActiveCheck" value="1" {{ $batch->is_active ? 'checked' : '' }}>
                             <label class="form-check-label" for="isActiveCheck">

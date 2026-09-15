@@ -11,7 +11,14 @@
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="font-weight-bolder mb-0">{{ $kelas->nama_kelas }}</h4>
-                        <span class="badge bg-gradient-success">Sesi {{ $activeMateri ? $activeMateri->urutan : '?' }}</span>
+                        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                            <span class="badge bg-gradient-success">{{ $activeSesi ? 'Sesi ' . $activeSesi->urutan : 'Belum tersedia' }}</span>
+                            @if($activeSesi && $activeSesi->tanggal_pelaksanaan)
+                                <span class="text-xs text-primary fw-semibold">
+                                    <i class="fas fa-calendar-alt me-1"></i>{{ $activeSesi->tanggal_pelaksanaan->translatedFormat('l, d F Y') }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -29,7 +36,7 @@
                             </div>
                         @endif
                     </div>
-                    
+
                     <h5>{{ $activeMateri ? $activeMateri->judul : 'Sesi Belum Dijadwalkan' }}</h5>
                     @if($activeMateri && $activeMateri->pembicara)
                     <div class="d-flex align-items-center mb-2">
@@ -46,7 +53,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Sidebar Playlist / Silabus -->
         <div class="col-lg-4 col-md-12">
             <div class="card shadow-sm h-100">
@@ -55,58 +62,54 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush" style="max-height: 500px; overflow-y: auto;">
-                        @if(isset($materiList))
-                            @forelse($materiList as $sesi)
-                                @php
-                                    $isActive = $activeMateri && $sesi->id === $activeMateri->id;
-                                    $isLocked = $sesi->is_locked;
-                                    // Pointer-events-none disables clicking if locked
-                                @endphp
-                                <a href="{{ $isLocked ? '#' : route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $sesi->id]) }}" data-url="{{ route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $sesi->id]) }}" class="text-decoration-none {{ $isLocked ? 'pe-none' : '' }}">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 {{ $isActive ? 'bg-gray-100 border-start border-4 border-primary fixed-style' : '' }}">
-                                        <div class="d-flex align-items-center">
-                                            <div class="icon icon-shape icon-sm shadow border-radius-sm {{ $isActive ? 'bg-gradient-primary' : ($isLocked ? 'bg-light' : 'bg-gradient-secondary') }} text-center me-3 d-flex align-items-center justify-content-center">
-                                                @if($isLocked)
-                                                    <i class="fas fa-lock text-secondary opacity-6" style="font-size: 0.7rem;"></i>
-                                                @elseif($isActive)
-                                                    <i class="fas fa-play text-white opacity-10" style="font-size: 0.7rem;"></i>
-                                                @else
-                                                    <i class="fas fa-check text-white opacity-10" style="font-size: 0.7rem;"></i>
-                                                @endif
-                                            </div>
-                                            <div>
-                                                <h6 class="text-sm {{ $isActive ? 'text-dark font-weight-bold' : ($isLocked ? 'text-secondary opacity-6' : 'text-secondary') }} mb-0">{{ $sesi->urutan }}. {{ $sesi->judul }}</h6>
-                                                @if($isLocked)
-                                                    <span class="text-xs text-secondary opacity-6">Terkunci</span>
-                                                @elseif($isActive)
-                                                    <span class="text-xs text-primary font-weight-bold opacity-8">Sedang ditonton</span>
-                                                @else
-                                                    <span class="text-xs text-success font-weight-bold opacity-8"><i class="fas fa-check-double me-1"></i>Selesai</span>
-                                                @endif
-                                            </div>
+                        @if(isset($sessionList))
+                            @forelse($sessionList as $session)
+                                <li class="list-group-item py-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <span class="badge bg-gradient-dark me-1">Sesi {{ $session->urutan }}</span>
+                                            <span class="text-sm font-weight-bold">{{ $session->judul }}</span>
+                                            @if($session->tanggal_pelaksanaan)
+                                                <div class="text-xs text-primary mt-1"><i class="fas fa-calendar-alt me-1"></i>{{ $session->tanggal_pelaksanaan->translatedFormat('l, d F Y') }}</div>
+                                            @endif
                                         </div>
-                                    </li>
-                                </a>
+                                        @if($session->quiz_unlocked)
+                                            <a href="{{ $session->quiz ? route('quiz.show', [$kelas->id, $session->id]) : $session->link_quiz }}" @if(!$session->quiz) target="_blank" @endif class="btn btn-success btn-sm mb-0"><i class="fas fa-clipboard-check me-1"></i>Kuis</a>
+                                        @elseif($session->link_quiz)
+                                            <span class="text-xs text-secondary"><i class="fas fa-lock me-1"></i>Kuis terkunci</span>
+                                        @endif
+                                    </div>
+                                    @foreach($session->materi as $video)
+                                        @php $isActive = $activeMateri && $video->id === $activeMateri->id; @endphp
+                                        <a href="{{ $video->is_locked ? '#' : route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $video->id]) }}" data-url="{{ route('kelas.belajar', ['id' => $kelas->id, 'materi_id' => $video->id]) }}" class="text-decoration-none d-block {{ $video->is_locked ? 'pe-none' : '' }}">
+                                            <div class="d-flex align-items-center py-2 ps-2 {{ $isActive ? 'bg-gray-100 border-start border-3 border-primary' : '' }}">
+                                                <div class="icon icon-shape icon-xs shadow border-radius-sm {{ $isActive ? 'bg-gradient-primary' : ($video->is_locked ? 'bg-light' : 'bg-gradient-secondary') }} text-center me-2 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-{{ $video->is_locked ? 'lock' : ($video->is_completed ? 'check' : 'play') }} {{ $video->is_locked ? 'text-secondary' : 'text-white' }}" style="font-size: 0.6rem;"></i>
+                                                </div>
+                                                <div class="text-sm {{ $video->is_locked ? 'text-secondary opacity-6' : 'text-dark' }}">{{ $video->urutan }}. {{ $video->judul }}</div>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                    @if($session->materi->isEmpty())
+                                        <div class="text-xs text-secondary ps-2">Video sesi belum tersedia.</div>
+                                    @endif
+                                </li>
                             @empty
-                                <p class="text-center py-4 text-sm text-primary mb-0">Video sesi segera ditambahkan.</p>
+                                <p class="text-center py-4 text-sm text-primary mb-0">Sesi pembelajaran segera ditambahkan.</p>
                             @endforelse
                         @endif
                     </ul>
                 </div>
                 <!-- Action Button Quiz Akhir -->
-                @if(!empty($kelas->link_quiz))
+                @if($activeSesi && $activeSesi->quiz_unlocked)
                 <div class="card-footer text-center pt-4 border-top">
-                    @if(isset($isAllCompleted) && $isAllCompleted && isset($materiList) && $materiList->count() > 0)
-                        <a href="{{ $kelas->link_quiz }}" target="_blank" class="btn bg-gradient-success w-100 mb-2 shadow position-relative overflow-hidden">
-                            <span class="position-relative z-index-1"><i class="fas fa-award me-2"></i> Kuis Ujian Akhir Terbuka</span>
-                        </a>
-                        <small class="text-xs text-success font-weight-bolder">Selamat! Anda berhak mengikuti ujian ini.</small>
-                    @else
-                        <button class="btn btn-light w-100 mb-2 shadow-none text-secondary" disabled>
-                            <i class="fas fa-lock me-2"></i> Kuis Ujian Akhir Kelas
-                        </button>
-                        <small class="text-xs text-secondary">Selesaikan seluruh tontonan materi Sesi (80%) di atas terlebih dahulu untuk membuka Ujian Kuis.</small>
-                    @endif
+                    <a href="{{ $activeSesi->quiz ? route('quiz.show', [$kelas->id, $activeSesi->id]) : $activeSesi->link_quiz }}" @if(!$activeSesi->quiz) target="_blank" @endif class="btn bg-gradient-success w-100 mb-2 shadow"><i class="fas fa-award me-2"></i>Kuis Sesi {{ $activeSesi->urutan }} Terbuka</a>
+                    <small class="text-xs text-success font-weight-bolder">Semua video sesi ini telah selesai ditonton.</small>
+                </div>
+                @elseif($isAllCompleted && !empty($kelas->link_quiz))
+                <div class="card-footer text-center pt-4 border-top">
+                    <a href="{{ $kelas->link_quiz }}" target="_blank" class="btn bg-gradient-success w-100 mb-2 shadow"><i class="fas fa-award me-2"></i>Kuis Akhir Kelas Terbuka</a>
+                    <small class="text-xs text-success font-weight-bolder">Selamat! Semua video kelas telah selesai ditonton.</small>
                 </div>
                 @endif
             </div>
@@ -125,7 +128,7 @@
     function onYouTubeIframeAPIReady() {
         var videoUrl = "{{ $activeMateri->video_url }}";
         var videoId = "";
-        
+
         // Ekstraktor ID Cerdas
         if (videoUrl.includes("embed/")) {
             videoId = videoUrl.split("embed/")[1].split("?")[0];
@@ -134,7 +137,7 @@
         } else if (videoUrl.includes("youtu.be/")) {
             videoId = videoUrl.split("youtu.be/")[1].split("?")[0];
         }
-        
+
         if(videoId) {
             player = new YT.Player('youtube-player', {
                 videoId: videoId,
@@ -157,15 +160,15 @@
 
     function checkProgress() {
         if (!player || isCompleted || hasNotified) return;
-        
+
         var duration = player.getDuration();
         var currentTime = player.getCurrentTime();
-        
+
         // Jika durasi valid dan tontonan melebihi 80% (0.8)
         if (duration > 0 && (currentTime / duration) >= 0.8) {
             isCompleted = true;
             hasNotified = true;
-            
+
             // Diam-diam lempar laporan ke Server Laravel
             fetch("{{ route('materi.complete', $activeMateri->id) }}", {
                 method: "POST",
@@ -181,7 +184,7 @@
                       if (nextLockedLink && nextLockedLink.hasAttribute('data-url')) {
                           nextLockedLink.href = nextLockedLink.getAttribute('data-url');
                           nextLockedLink.classList.remove('pe-none');
-                          
+
                           // Ubah ikon gembok menjadi ikon play (warna hijau)
                           let iconDiv = nextLockedLink.querySelector('.icon-shape');
                           if (iconDiv) {
@@ -189,7 +192,7 @@
                               iconDiv.classList.add('bg-gradient-success');
                               iconDiv.innerHTML = '<i class="fas fa-play text-white opacity-10" style="font-size: 0.7rem;"></i>';
                           }
-                          
+
                           // Ubah teks "Terkunci" menjadi Badge Pop-up Merah
                           let titleSpan = nextLockedLink.querySelector('h6');
                           if (titleSpan) {
@@ -201,7 +204,7 @@
                               statusSpan.classList.remove('text-secondary', 'opacity-6', 'text-primary');
                           }
                       }
-                      
+
                       // Beri tahu user secara halus (tanpa interupsi alert)
                       console.log('Sesi berikutnya berhasil dibuka!');
                   }

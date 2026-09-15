@@ -16,7 +16,7 @@ Route::get('/', function () {
 
     // 1. Hitung User Stats
     $users = \App\Models\User::with('kelas')->get();
-    
+
     $stats = [
         'users_member' => 0,
         'users_ctt' => 0,
@@ -25,7 +25,7 @@ Route::get('/', function () {
         'users_plant' => 0,
         'users_grow' => 0,
         'users_fasilitator' => 0,
-        
+
         'kelas_community' => \App\Models\Kelas::where('kategori', 'like', '%Community%')->count(),
         'kelas_equip_new' => \App\Models\Kelas::where('kategori', 'like', '%Equip - New%')->count(),
         'kelas_equip_plant' => \App\Models\Kelas::where('kategori', 'like', '%Equip - Plant%')->count(),
@@ -71,16 +71,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // Rute Kelas
     Route::get('/kelas', [\App\Http\Controllers\KelasController::class, 'index'])->name('kelas.index');
     Route::get('/kelas/{id}', [\App\Http\Controllers\KelasController::class, 'show'])->name('kelas.show');
     Route::post('/kelas/{id}/request', [\App\Http\Controllers\KelasController::class, 'requestKelas'])->name('kelas.request');
     Route::get('/kelas/{id}/belajar/{materi_id?}', [\App\Http\Controllers\KelasController::class, 'belajar'])->name('kelas.belajar');
-    
+
     // API Pelacakan Progres Video (80%)
     Route::post('/materi/{materi_id}/complete', [\App\Http\Controllers\Api\ProgressController::class, 'markComplete'])->name('materi.complete');
-    
+    Route::get('/kelas/{kelas}/sesi/{sesi}/quiz', [\App\Http\Controllers\QuizController::class, 'show'])->name('quiz.show');
+    Route::post('/kelas/{kelas}/sesi/{sesi}/quiz', [\App\Http\Controllers\QuizController::class, 'submit'])->name('quiz.submit');
+
     // Rute Users (Admin Only)
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
@@ -93,9 +95,22 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'exportPdf'])->name('reports.pdf');
+        Route::get('quiz-reports', [\App\Http\Controllers\Admin\QuizReportController::class, 'index'])->name('quiz-reports.index');
+        Route::get('quiz-reports/pdf', [\App\Http\Controllers\Admin\QuizReportController::class, 'exportPdf'])->name('quiz-reports.pdf');
         Route::resource('kelas', \App\Http\Controllers\AdminKelasController::class)->except(['show']);
         Route::resource('kelas.batches', \App\Http\Controllers\AdminBatchController::class)->except(['show']);
-        
+
+        Route::get('kelas/{kelas}/sesi', [\App\Http\Controllers\AdminSesiController::class, 'index'])->name('sesi.index');
+        Route::get('kelas/{kelas}/sesi/create', [\App\Http\Controllers\AdminSesiController::class, 'create'])->name('sesi.create');
+        Route::post('kelas/{kelas}/sesi', [\App\Http\Controllers\AdminSesiController::class, 'store'])->name('sesi.store');
+        Route::get('kelas/{kelas}/sesi/{sesi}/edit', [\App\Http\Controllers\AdminSesiController::class, 'edit'])->name('sesi.edit');
+        Route::put('kelas/{kelas}/sesi/{sesi}', [\App\Http\Controllers\AdminSesiController::class, 'update'])->name('sesi.update');
+        Route::delete('kelas/{kelas}/sesi/{sesi}', [\App\Http\Controllers\AdminSesiController::class, 'destroy'])->name('sesi.destroy');
+
+        Route::get('kelas/{kelas}/sesi/{sesi}/quiz', [\App\Http\Controllers\AdminQuizController::class, 'edit'])->name('quiz.edit');
+        Route::post('kelas/{kelas}/sesi/{sesi}/quiz', [\App\Http\Controllers\AdminQuizController::class, 'save'])->name('quiz.save');
+        Route::delete('kelas/{kelas}/sesi/{sesi}/quiz', [\App\Http\Controllers\AdminQuizController::class, 'destroy'])->name('quiz.destroy');
+
         // Sub-rute untuk Materi Video di dalam Kelas
         Route::get('kelas/{kelas}/materi', [\App\Http\Controllers\AdminMateriController::class, 'index'])->name('materi.index');
         Route::get('kelas/{kelas}/materi/create', [\App\Http\Controllers\AdminMateriController::class, 'create'])->name('materi.create');
@@ -105,5 +120,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('kelas/{kelas}/materi/{materi}', [\App\Http\Controllers\AdminMateriController::class, 'destroy'])->name('materi.destroy');
     });
 });
+
+// Public capability links for sharing an individual quiz result.
+Route::get('/quiz-results/{token}', [\App\Http\Controllers\Admin\QuizReportController::class, 'preview'])->name('quiz-results.preview');
+Route::get('/quiz-results/{token}/download', [\App\Http\Controllers\Admin\QuizReportController::class, 'exportAttemptPdf'])->name('quiz-results.download');
 
 require __DIR__.'/auth.php';

@@ -31,7 +31,7 @@ class User extends Authenticatable
     public function kelas()
     {
         return $this->belongsToMany(Kelas::class, 'kelas_users')
-            ->withPivot('status', 'rejection_reason')
+            ->withPivot('status', 'rejection_reason', 'batch_id')
             ->withTimestamps();
     }
 
@@ -40,6 +40,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Materi::class, 'materi_users')
                     ->withPivot('is_completed')
                     ->withTimestamps();
+    }
+
+    public function quizAttempts()
+    {
+        return $this->hasMany(QuizAttempt::class);
     }
 
     /**
@@ -74,17 +79,17 @@ class User extends Authenticatable
         $lulusan = $this->kelas()->wherePivot('status', 'completed')->pluck('nama_kelas')->map(function($nama) {
             return strtolower($nama);
         })->toArray();
-        
+
         // Prioritas Tertinggi: DM
         if ($this->hasCompletedClass($lulusan, ['dmt', 'disciple maker'])) {
             return 'Disciple Maker (DM)';
         }
-        
+
         // Prioritas Kedua: Core Team
         if ($this->hasCompletedClass($lulusan, ['ctt', 'core team'])) {
             return 'Core Team';
         }
-        
+
         return 'Member';
     }
 
@@ -96,22 +101,22 @@ class User extends Authenticatable
         $lulusan = $this->kelas()->wherePivot('status', 'completed')->pluck('nama_kelas')->map(function($nama) {
             return strtolower($nama);
         })->toArray();
-        
+
         if ($this->hasCompletedClass($lulusan, ['volunteer'])) {
             return 'Volunteer';
         }
-        
+
         $hasGrade1 = $this->hasCompletedClass($lulusan, ['grade 1', 'g1']);
         $hasMarried = $this->hasCompletedClass($lulusan, ['married', 'marriage', 'family & marriage']);
-        
+
         if ($hasGrade1 && $hasMarried) {
             return 'Grow';
         }
-        
+
         if ($this->hasCompletedClass($lulusan, ['foundation class 2', 'fc2', 'foundation 2', 'foundation class 3', 'fc3', 'foundation 3'])) {
             return 'Plant';
         }
-        
+
         return 'New';
     }
 
@@ -121,7 +126,7 @@ class User extends Authenticatable
     public function getEquipStatusColorAttribute()
     {
         $status = $this->equip_status;
-        
+
         return match($status) {
             'Volunteer' => 'success',
             'Grow'      => 'info',
@@ -152,18 +157,18 @@ class User extends Authenticatable
     public function classProgress($kelas_id)
     {
         $kelas = \App\Models\Kelas::withCount('materi')->find($kelas_id);
-        
+
         // Cek jika kelas belum punya materi video satupun
         if (!$kelas || $kelas->materi_count == 0) {
             return 0;
         }
-        
+
         // Membaca riwayat Pivot materi yang sudah is_completed untuk Kelas ID bersangkutan
         $completedCount = $this->materi()
             ->where('materis.kelas_id', $kelas_id)
             ->wherePivot('is_completed', true)
             ->count();
-            
+
         return round(($completedCount / $kelas->materi_count) * 100);
     }
 }

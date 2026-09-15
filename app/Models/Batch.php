@@ -27,4 +27,9 @@ class Batch extends Model
     {
         return $this->hasMany(KelasUser::class);
     }
+
+    public function sessionSchedules()
+    {
+        return $this->hasMany(BatchSesi::class);
+    }
 }

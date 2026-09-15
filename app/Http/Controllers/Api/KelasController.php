@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Batch;
 use App\Models\Kelas;
-use App\Models\KelasUser;
 
 class KelasController extends Controller
 {
@@ -40,17 +40,26 @@ class KelasController extends Controller
     public function show(Request $request, $id)
     {
         $user = $request->user();
-        $kelas = Kelas::with(['materi' => function ($q) {
-            $q->orderBy('urutan', 'asc');
-        }])->findOrFail($id);
+        $kelas = Kelas::with([
+            'materi' => function ($q) {
+                $q->orderBy('urutan', 'asc');
+            },
+            'sesis.materi' => function ($q) {
+                $q->orderBy('urutan', 'asc');
+            },
+        ])->findOrFail($id);
 
         $enrollment = $user->kelas()->where('kelas_id', $id)->first();
+        $batchSchedules = $enrollment && $enrollment->pivot && $enrollment->pivot->batch_id
+            ? (Batch::with('sessionSchedules')->find($enrollment->pivot->batch_id)?->sessionSchedules ?? collect())->keyBy('sesi_id')
+            : collect();
+
         $completedMateriIds = $user->materi()
             ->wherePivot('is_completed', true)
             ->pluck('materi_id')
             ->toArray();
 
-        $materiList = $kelas->materi->map(function ($m, $index) use ($completedMateriIds, $kelas, $user) {
+        $materiList = $kelas->materi->map(function ($m) use ($completedMateriIds) {
             $m->is_completed = in_array($m->id, $completedMateriIds);
             return $m;
         });
@@ -70,6 +79,28 @@ class KelasController extends Controller
         $done = $materiList->filter(fn($m) => $m->is_completed)->count();
         $progressPct = $total > 0 ? round(($done / $total) * 100) : 0;
 
+        $materiById = $materiList->keyBy('id');
+        $sesiList = $kelas->sesis->map(function ($sesi) use ($materiById, $batchSchedules) {
+            $sesiMateri = $sesi->materi
+                ->map(fn($materi) => $materiById->get($materi->id, $materi))
+                ->values();
+
+            $tanggalPelaksanaan = $batchSchedules->get($sesi->id)?->tanggal_pelaksanaan;
+
+            return [
+                'id' => $sesi->id,
+                'judul' => $sesi->judul,
+                'deskripsi' => $sesi->deskripsi,
+                'link_quiz' => $sesi->link_quiz,
+                'urutan' => $sesi->urutan,
+                'tanggal_pelaksanaan' => $tanggalPelaksanaan ? $tanggalPelaksanaan->toDateString() : null,
+                'tanggal' => $tanggalPelaksanaan ? $tanggalPelaksanaan->toDateString() : null,
+                'is_completed' => $sesiMateri->isNotEmpty()
+                    && $sesiMateri->every(fn($materi) => $materi->is_completed),
+                'materi' => $sesiMateri,
+            ];
+        })->values();
+
         return response()->json([
             'status' => 'success',
             'data' => [
@@ -82,6 +113,7 @@ class KelasController extends Controller
                 'is_enrolled'       => $enrollment ? true : false,
                 'enrollment_status' => $enrollment ? $enrollment->pivot->status : null,
                 'progress_pct'      => $progressPct,
+                'sesi'              => $sesiList,
                 'materi'            => $materiList,
             ],
         ]);

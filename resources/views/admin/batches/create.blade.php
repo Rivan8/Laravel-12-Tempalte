@@ -11,7 +11,7 @@
                     </div>
                     <p class="mt-2 text-sm">Atur periode batch untuk kelas <span class="font-weight-bold">{{ $kelas->nama_kelas }}</span>.</p>
                 </div>
-                
+
                 <div class="card-body">
                     <form action="{{ route('admin.kelas.batches.store', $kelas->id) }}" method="POST" class="mt-6 space-y-4">
                         @csrf
@@ -40,6 +40,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if($sesis->count() > 1)
+                            <div class="mb-4 p-3 bg-light border-radius-md">
+                                <label class="form-control-label"><i class="fas fa-calendar-alt text-primary me-1"></i>Jadwal Pelaksanaan Tiap Sesi</label>
+                                <small class="text-secondary d-block mb-3">Atur tanggal pelaksanaan sesi untuk batch ini.</small>
+                                <div class="row">
+                                    @foreach($sesis as $sesi)
+                                        <div class="col-md-6 mb-3">
+                                            <label for="tanggal_sesi_{{ $sesi->id }}" class="form-label text-sm">Sesi {{ $sesi->urutan }} - {{ $sesi->judul }}</label>
+                                            <input type="date" name="tanggal_sesi[{{ $sesi->id }}]" id="tanggal_sesi_{{ $sesi->id }}" value="{{ old('tanggal_sesi.' . $sesi->id) }}" class="form-control @error('tanggal_sesi.' . $sesi->id) is-invalid @enderror" required>
+                                            @error('tanggal_sesi.' . $sesi->id)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="row">
                             <div class="col-md-12">
@@ -86,7 +102,7 @@
             statusLabel.className = 'text-info'; // Keep blue when inactive
         }
     });
-    
+
     // Initialize label state based on checkbox
     if (!toggle.checked) {
         statusLabel.textContent = 'Nonaktif';

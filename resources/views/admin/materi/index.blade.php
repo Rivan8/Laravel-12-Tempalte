@@ -6,7 +6,7 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-            
+
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show text-white" role="alert">
                 <span class="alert-icon"><i class="fas fa-check"></i></span>
@@ -58,6 +58,11 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center align-items-center gap-2">
+                                            @if($m->sesi)
+                                            <a href="{{ route('admin.quiz.edit', [$kelas->id, $m->sesi->id]) }}" class="btn btn-link text-success text-gradient px-2 mb-0 shadow-none">
+                                                <i class="fas fa-clipboard-check me-1" aria-hidden="true"></i>Quiz
+                                            </a>
+                                            @endif
                                             <a href="{{ route('admin.materi.edit', ['kelas' => $kelas->id, 'materi' => $m->id]) }}" class="btn btn-link text-info text-gradient px-2 mb-0 shadow-none">
                                                 <i class="fas fa-edit me-2" aria-hidden="true"></i>Edit
                                             </a>

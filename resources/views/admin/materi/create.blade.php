@@ -15,13 +15,22 @@
                     <form action="{{ route('admin.materi.store', $kelas->id) }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-9 mb-3">
-                                <label class="form-label text-sm font-weight-bold">Judul Sesi (Contoh: Sesi 1 - Pengenalan)</label>
+                            <div class="col-md-7 mb-3">
+                                <label class="form-label text-sm font-weight-bold">Judul Video</label>
                                 <input type="text" name="judul" class="form-control" required>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label class="form-label text-sm font-weight-bold">Sesi Ke-</label>
-                                <input type="number" name="urutan" class="form-control text-center font-weight-bold text-dark" value="{{ $nextUrutan }}" required>
+                                <label class="form-label text-sm font-weight-bold">Sesi</label>
+                                <select name="sesi_id" class="form-select" required>
+                                    <option value="">Pilih sesi</option>
+                                    @foreach($sesis as $sesi)
+                                        <option value="{{ $sesi->id }}" {{ $sesiId == $sesi->id ? 'selected' : '' }}>Sesi {{ $sesi->urutan }} - {{ $sesi->judul }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label text-sm font-weight-bold">Urutan</label>
+                                <input type="number" name="urutan" class="form-control text-center font-weight-bold text-dark" value="{{ $nextUrutan }}" min="1" required>
                             </div>
                         </div>
 

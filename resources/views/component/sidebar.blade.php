@@ -144,6 +144,14 @@
             <span class="nav-link-text ms-1">Laporan Progress</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('admin.quiz-reports.*') ? 'active' : '' }}" href="{{ route('admin.quiz-reports.index') }}">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fas fa-clipboard-check {{ request()->routeIs('admin.quiz-reports.*') ? 'text-white' : 'text-dark' }}"></i>
+            </div>
+            <span class="nav-link-text ms-1">Laporan Hasil Quiz</span>
+          </a>
+        </li>
         @if(isset($pendingRequestCount) && $pendingRequestCount > 0)
               <span class="sidebar-badge-count"
                 title="{{ $pendingRequestCount }} request kelas pending">{{ $pendingRequestCount > 9 ? '9+' : $pendingRequestCount }}</span>

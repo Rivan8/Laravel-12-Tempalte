@@ -60,8 +60,8 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex flex-column gap-2 align-items-center">
-                                            <a href="{{ route('admin.materi.index', $k->id) }}" class="btn btn-outline-info btn-sm px-3 mb-0" style="min-width: 140px;">
-                                                <i class="fas fa-film me-2"></i> {{ $k->materi->count() }} Video Sesi
+                                            <a href="{{ route('admin.sesi.index', $k->id) }}" class="btn btn-outline-info btn-sm px-3 mb-0" style="min-width: 140px;">
+                                                <i class="fas fa-layer-group me-2"></i> Kelola Sesi
                                             </a>
                                             <a href="{{ route('admin.kelas.batches.index', $k->id) }}" class="btn btn-outline-primary btn-sm px-3 mb-0" style="min-width: 140px;">
                                                 <i class="fas fa-users me-2"></i> Kelola Batch
