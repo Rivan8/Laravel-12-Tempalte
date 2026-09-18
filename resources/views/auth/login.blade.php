@@ -12,6 +12,45 @@
     <form method="POST" action="{{ route('login') }}" style="display: flex; flex-direction: column; gap: 18px;">
         @csrf
 
+        @if ($errors->has('google'))
+            <x-input-error :messages="$errors->get('google')" />
+        @endif
+
+        <div style="padding: 14px; border: 1px solid #fed7aa; border-radius: 16px; background: linear-gradient(135deg, #fff7ed, #fff);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.68rem; color: #c2410c; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">Akses cepat</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 999px; background: #ffedd5; color: #c2410c; font-size: 0.64rem; font-weight: 700;">
+                    <i class="fas fa-bolt"></i> Direkomendasikan
+                </span>
+            </div>
+            <a href="{{ route('google.redirect') }}" style="
+                display: flex; align-items: center; justify-content: center; gap: 10px;
+                width: 100%; min-height: 48px; padding: 11px 14px; box-sizing: border-box;
+                border: 1px solid #e2e8f0; border-radius: 11px;
+                background: #fff; color: #1e293b; font-size: 0.88rem; font-weight: 700;
+                text-decoration: none; transition: all 0.2s; font-family: 'Inter', sans-serif;
+                box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+            " onmouseover="this.style.borderColor='#f97316'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 7px 16px rgba(234,88,12,0.14)'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(15,23,42,0.05)'">
+                <span style="display: inline-flex; align-items: center; justify-content: center; width: 25px; height: 25px; border: 1px solid #e2e8f0; border-radius: 7px; background: #fff;">
+                    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                        <path fill="#EA4335" d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.796 2.715v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.614Z" />
+                        <path fill="#4285F4" d="M9 18c2.43 0 4.467-.806 5.956-2.181l-2.908-2.258c-.806.54-1.835.859-3.048.859-2.347 0-4.337-1.586-5.05-3.72H.944v2.331A9 9 0 0 0 9 18Z" />
+                        <path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.668 9c0-.59.101-1.163.282-1.7V4.969H.944A9 9 0 0 0 0 9c0 1.452.348 2.826.944 4.031L3.95 10.7Z" />
+                        <path fill="#34A853" d="M9 3.58c1.323 0 2.51.454 3.444 1.345l2.583-2.583C13.463.892 11.426 0 9 0A9 9 0 0 0 .944 4.969L3.95 7.3C4.663 5.166 6.653 3.58 9 3.58Z" />
+                    </svg>
+                </span>
+                <span style="flex: 1; text-align: left;">Lanjutkan dengan Google</span>
+                <i class="fas fa-arrow-right" style="color: #f97316; font-size: 0.78rem;"></i>
+            </a>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; color: #94a3b8; font-size: 0.72rem;">
+            <span style="height: 1px; flex: 1; background: #e2e8f0;"></span>
+            <span>atau masuk dengan email</span>
+            <span style="height: 1px; flex: 1; background: #e2e8f0;"></span>
+        </div>
+
         {{-- Email --}}
         <div>
             <label for="email" style="display: block; font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 6px;">

@@ -5,11 +5,12 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2" style="text-decoration: none;">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm shadow-sm" style="background: linear-gradient(to bottom right, #fb923c, #ea580c); border-radius: 0.375rem; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.875rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
-                            ESC
-                        </div>
-                        <span class="font-bold text-xl text-gray-800 tracking-tight" style="font-weight: 700; font-size: 1.25rem; color: #1f2937; letter-spacing: -0.025em;">Equip <span class="text-orange-600" style="color: #ea580c;">Discipleship</span></span>
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3" style="text-decoration: none;">
+                        <img src="{{ asset('img/logos/logo_equip.svg') }}" alt="Equip Discipleship" style="width: 38px; height: 38px; padding: 7px; border-radius: 10px; background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%); filter: brightness(0) invert(1); object-fit: contain; box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25);">
+                        <span style="display: flex; flex-direction: column; line-height: 1.1;">
+                            <span style="font-weight: 800; font-size: 1.05rem; color: #1f2937; letter-spacing: -0.025em;">Equip <span style="color: #ea580c;">Discipleship</span></span>
+                            <span style="font-size: 0.62rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px;">Learning Center</span>
+                        </span>
                     </a>
                 </div>
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/privacy-policy', 'privacy')->name('privacy');
@@ -94,6 +95,10 @@ Route::middleware('auth')->group(function () {
     // Admin CMS (Manajemen Kelas & Video)
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/participant-detail', [ReportController::class, 'participantDetail'])->name('reports.participant-detail');
+        Route::get('reports/participant-detail/pdf', [ReportController::class, 'exportParticipantDetailPdf'])->name('reports.participant-detail.pdf');
+        Route::get('reports/class-status', [ReportController::class, 'classStatus'])->name('reports.class-status');
+        Route::get('reports/class-status/pdf', [ReportController::class, 'exportClassStatusPdf'])->name('reports.class-status.pdf');
         Route::get('reports/pdf', [\App\Http\Controllers\Admin\ReportController::class, 'exportPdf'])->name('reports.pdf');
         Route::get('quiz-reports', [\App\Http\Controllers\Admin\QuizReportController::class, 'index'])->name('quiz-reports.index');
         Route::get('quiz-reports/pdf', [\App\Http\Controllers\Admin\QuizReportController::class, 'exportPdf'])->name('quiz-reports.pdf');

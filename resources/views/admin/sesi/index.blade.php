@@ -31,6 +31,30 @@
                             @else
                                 <span class="text-xs text-warning ms-3"><i class="fas fa-exclamation-circle me-1"></i>Kuis belum diisi</span>
                             @endif
+                            @if($sesi->materi->isNotEmpty())
+                                <div class="mt-3 pt-3 border-top">
+                                    <div class="text-xs text-uppercase text-secondary font-weight-bold mb-2">Video Sesi</div>
+                                    @foreach($sesi->materi as $materi)
+                                        <div class="d-flex justify-content-between align-items-center gap-2 py-2 border-bottom">
+                                            <div class="min-width-0">
+                                                <span class="text-xs text-secondary me-2">{{ $materi->urutan }}.</span>
+                                                <span class="text-sm font-weight-bold">{{ $materi->judul }}</span>
+                                                @if($materi->pembicara)
+                                                    <span class="text-xs text-secondary ms-2">({{ $materi->pembicara }})</span>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex gap-2 flex-shrink-0">
+                                                <a href="{{ $materi->video_url }}" target="_blank" rel="noopener" class="btn btn-link text-info btn-sm mb-0 px-1" title="Buka video">
+                                                    <i class="fas fa-external-link-alt"></i>
+                                                </a>
+                                                <a href="{{ route('admin.materi.edit', [$kelas->id, $materi->id]) }}" class="btn btn-outline-info btn-sm mb-0">
+                                                    <i class="fas fa-edit me-1"></i>Edit Video
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                         <div class="d-flex gap-2 flex-shrink-0">
                             <a href="{{ route('admin.materi.create', ['kelas' => $kelas->id, 'sesi_id' => $sesi->id]) }}" class="btn btn-outline-info btn-sm mb-0"><i class="fas fa-video me-1"></i>Tambah Video</a>

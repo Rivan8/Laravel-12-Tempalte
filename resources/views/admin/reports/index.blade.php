@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', 'Laporan Progress')
+    @section('title', 'Laporan Proses')
 
     <div class="container-fluid py-4">
         {{-- Page Header --}}
@@ -14,7 +14,7 @@
                                         <i class="fas fa-chart-line text-dark fs-5"></i>
                                     </div>
                                     <div>
-                                        <h4 class="text-white font-weight-bolder mb-0">Laporan Progress Belajar</h4>
+                                        <h4 class="text-white font-weight-bolder mb-0">Laporan Proses Belajar</h4>
                                         <p class="text-white text-sm mb-0 opacity-8">Pantau perkembangan belajar peserta secara real-time</p>
                                     </div>
                                 </div>
@@ -444,7 +444,7 @@
                 searchInput.addEventListener('input', function() {
                     const filter = this.value.toLowerCase();
                     const rows = document.querySelectorAll('#reportTable tbody .report-row');
-                    
+
                     rows.forEach(function(row) {
                         const text = row.textContent.toLowerCase();
                         if (text.includes(filter)) {

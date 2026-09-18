@@ -73,11 +73,6 @@
                                                 <div class="text-xs text-primary mt-1"><i class="fas fa-calendar-alt me-1"></i>{{ $session->tanggal_pelaksanaan->translatedFormat('l, d F Y') }}</div>
                                             @endif
                                         </div>
-                                        @if($session->quiz_unlocked)
-                                            <a href="{{ $session->quiz ? route('quiz.show', [$kelas->id, $session->id]) : $session->link_quiz }}" @if(!$session->quiz) target="_blank" @endif class="btn btn-success btn-sm mb-0"><i class="fas fa-clipboard-check me-1"></i>Kuis</a>
-                                        @elseif($session->link_quiz)
-                                            <span class="text-xs text-secondary"><i class="fas fa-lock me-1"></i>Kuis terkunci</span>
-                                        @endif
                                     </div>
                                     @foreach($session->materi as $video)
                                         @php $isActive = $activeMateri && $video->id === $activeMateri->id; @endphp
@@ -93,6 +88,17 @@
                                     @if($session->materi->isEmpty())
                                         <div class="text-xs text-secondary ps-2">Video sesi belum tersedia.</div>
                                     @endif
+                                    @if($session->quiz_unlocked)
+                                        <div class="mt-3 pt-3 border-top">
+                                            <a href="{{ $session->quiz ? route('quiz.show', [$kelas->id, $session->id]) : $session->link_quiz }}" @if(!$session->quiz) target="_blank" @endif class="btn btn-success btn-sm w-100 mb-0">
+                                                <i class="fas fa-clipboard-check me-1"></i>Kuis Sesi {{ $session->urutan }}
+                                            </a>
+                                        </div>
+                                    @elseif($session->link_quiz)
+                                        <div class="mt-3 pt-3 border-top text-center">
+                                            <span class="text-xs text-secondary"><i class="fas fa-lock me-1"></i>Kuis terkunci sampai semua video selesai</span>
+                                        </div>
+                                    @endif
                                 </li>
                             @empty
                                 <p class="text-center py-4 text-sm text-primary mb-0">Sesi pembelajaran segera ditambahkan.</p>
@@ -101,12 +107,7 @@
                     </ul>
                 </div>
                 <!-- Action Button Quiz Akhir -->
-                @if($activeSesi && $activeSesi->quiz_unlocked)
-                <div class="card-footer text-center pt-4 border-top">
-                    <a href="{{ $activeSesi->quiz ? route('quiz.show', [$kelas->id, $activeSesi->id]) : $activeSesi->link_quiz }}" @if(!$activeSesi->quiz) target="_blank" @endif class="btn bg-gradient-success w-100 mb-2 shadow"><i class="fas fa-award me-2"></i>Kuis Sesi {{ $activeSesi->urutan }} Terbuka</a>
-                    <small class="text-xs text-success font-weight-bolder">Semua video sesi ini telah selesai ditonton.</small>
-                </div>
-                @elseif($isAllCompleted && !empty($kelas->link_quiz))
+                @if($isAllCompleted && !empty($kelas->link_quiz))
                 <div class="card-footer text-center pt-4 border-top">
                     <a href="{{ $kelas->link_quiz }}" target="_blank" class="btn bg-gradient-success w-100 mb-2 shadow"><i class="fas fa-award me-2"></i>Kuis Akhir Kelas Terbuka</a>
                     <small class="text-xs text-success font-weight-bolder">Selamat! Semua video kelas telah selesai ditonton.</small>

@@ -157,7 +157,9 @@
         <div style="position: relative; z-index: 2;">
             {{-- Logo & App Name --}}
             <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 52px;">
-                <div class="b-logo-box">ESC</div>
+                <div style="width: 112px; height: 112px; padding: 20px; border-radius: 26px; background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 28px rgba(234, 88, 12, 0.55);">
+                    <img src="{{ asset('img/logos/logo_equip.svg') }}" alt="Equip Discipleship" style="width: 100%; height: 100%; filter: brightness(0) invert(1); object-fit: contain;">
+                </div>
                 <div>
                     <div class="b-app-name">Equip <span>Discipleship</span></div>
                     <div class="b-subtitle">Learning Center</div>
@@ -194,14 +196,9 @@
 
         {{-- Logo Mobile (tersembunyi di desktop) --}}
         <a href="/" class="auth-mobile-logo">
-            <div style="
-                width: 48px; height: 48px; border-radius: 14px;
-                background: linear-gradient(135deg, #ea580c, #fb923c);
-                display: flex; align-items: center; justify-content: center;
-                font-size: 1.1rem; font-weight: 800; color: #fff;
-                box-shadow: 0 6px 22px rgba(234,88,12,0.4);
-                flex-shrink: 0;
-            ">ESC</div>
+            <div style="width: 72px; height: 72px; padding: 13px; border-radius: 18px; background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 22px rgba(234, 88, 12, 0.4);">
+                <img src="{{ asset('img/logos/logo_equip.svg') }}" alt="Equip Discipleship" style="width: 100%; height: 100%; filter: brightness(0) invert(1); object-fit: contain;">
+            </div>
             <div>
                 <div style="font-size: 1.15rem; font-weight: 800; color: #1e293b; letter-spacing: -0.3px; line-height: 1.2;">
                     Equip <span style="color: #ea580c;">Discipleship</span>

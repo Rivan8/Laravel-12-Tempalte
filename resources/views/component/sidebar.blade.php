@@ -4,13 +4,13 @@
     <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
       aria-hidden="true" id="iconSidenav"></i>
     <a class="navbar-brand m-0 d-flex align-items-center py-3" href="{{ route('dashboard') }}">
-      <div
-        class="icon icon-shape icon-sm shadow-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center"
-        style="background-image: linear-gradient(310deg, #fb923c 0%, #ea580c 100%); width: 32px; height: 32px;">
-        <span class="text-white font-weight-bold" style="font-size: 0.85rem; letter-spacing: 0;">ESC</span>
-      </div>
-      <span class="ms-1 font-weight-bolder text-dark" style="font-size: 1.05rem; letter-spacing: -0.5px;">Equip <span
-          style="color: #ea580c;">Discipleship</span></span>
+      <span style="width: 38px; height: 38px; padding: 7px; border-radius: 10px; background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25);">
+        <img src="{{ asset('img/logos/logo_equip.svg') }}" alt="Equip Discipleship" style="display: block; width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1);">
+      </span>
+      <span class="ms-2 font-weight-bolder text-dark" style="display: flex; flex-direction: column; line-height: 1.1; font-size: 0.88rem; letter-spacing: -0.25px; white-space: nowrap;">
+        <span>Equip <span style="color: #ea580c;">Discipleship</span></span>
+        <small style="font-size: 0.6rem; color: #64748b; font-weight: 600; letter-spacing: 0.4px; margin-top: 3px;">Learning Center</small>
+      </span>
     </a>
   </div>
   <hr class="horizontal dark mt-0">
@@ -137,13 +137,34 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('admin.reports.index') ? 'active' : '' }}" href="{{ route('admin.reports.index') }}">
+          <a class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}"
+            href="#laporan-submenu" data-bs-toggle="collapse" role="button"
+            aria-expanded="{{ request()->routeIs('admin.reports.*') ? 'true' : 'false' }}"
+            aria-controls="laporan-submenu">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="fas fa-chart-bar {{ request()->routeIs('admin.reports.index') ? 'text-white' : 'text-dark' }}"></i>
+              <i class="fas fa-chart-bar {{ request()->routeIs('admin.reports.*') ? 'text-white' : 'text-dark' }}"></i>
             </div>
-            <span class="nav-link-text ms-1">Laporan Progress</span>
+            <span class="nav-link-text ms-1">Laporan</span>
+            <i class="fas fa-chevron-down ms-auto me-3 text-xs"></i>
           </a>
         </li>
+        <div class="collapse {{ request()->routeIs('admin.reports.*') ? 'show' : '' }}" id="laporan-submenu">
+          <li class="nav-item ms-4">
+            <a class="nav-link py-2 {{ request()->routeIs('admin.reports.index') ? 'active' : '' }}" href="{{ route('admin.reports.index') }}">
+              <span class="nav-link-text ms-1">Laporan Proses</span>
+            </a>
+          </li>
+          <li class="nav-item ms-4">
+            <a class="nav-link py-2 {{ request()->routeIs('admin.reports.participant-detail') ? 'active' : '' }}" href="{{ route('admin.reports.participant-detail') }}">
+              <span class="nav-link-text ms-1">Laporan Peserta Detail</span>
+            </a>
+          </li>
+          <li class="nav-item ms-4">
+            <a class="nav-link py-2 {{ request()->routeIs('admin.reports.class-status') ? 'active' : '' }}" href="{{ route('admin.reports.class-status') }}">
+              <span class="nav-link-text ms-1">Laporan Status Kelas Peserta</span>
+            </a>
+          </li>
+        </div>
         <li class="nav-item">
           <a class="nav-link {{ request()->routeIs('admin.quiz-reports.*') ? 'active' : '' }}" href="{{ route('admin.quiz-reports.index') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">

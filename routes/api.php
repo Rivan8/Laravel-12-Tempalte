@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\KelasController;
 use App\Http\Controllers\Api\ProgressController;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/auth/google', [AuthController::class, 'google']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
